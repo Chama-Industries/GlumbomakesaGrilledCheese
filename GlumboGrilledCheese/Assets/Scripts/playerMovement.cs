@@ -12,6 +12,9 @@ public class playerMovement : MonoBehaviour
     // Rigidbody
     private Rigidbody rb;
 
+    // Variables for a Raycast
+    float distanceToGround;
+
     // 3D movement variable
     Vector3 movementD;
 
@@ -32,6 +35,8 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         // Score Reference
         scoreCheck = playerScore.getScore();
+        // Setting the player's distance from the ground
+        distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
 
     // Update is called once per frame
@@ -44,7 +49,7 @@ public class playerMovement : MonoBehaviour
     // FixedUpdate is called at fixed intervals
     void FixedUpdate()
     {
-        if (Input.GetKey(jump))
+        if (Input.GetKey(jump) && isGrounded())
         {
             rb.AddForce(jumpPower, ForceMode.VelocityChange);
         }
@@ -80,9 +85,15 @@ public class playerMovement : MonoBehaviour
     {
         if (scoreCheck != playerScore.getScore())
         {
-            theScore.text = "Score: " + playerScore.getScore() + "";
+            theScore.text = "Score: " + playerScore.getScore() + " ";
             scoreCheck = playerScore.getScore();
         }
+    }
+
+    // Using a Raycast to check if the player is able to jump, aka no more flying
+    public bool isGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
     }
 }
 
