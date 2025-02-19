@@ -22,7 +22,6 @@ public class playerMovement : MonoBehaviour
 
     // Controls
     public KeyCode jump = KeyCode.Space;
-    public KeyCode temp = KeyCode.W;
 
     // Variables to Control & Display the Player's Score
     public TextMeshProUGUI theScore;
@@ -54,10 +53,11 @@ public class playerMovement : MonoBehaviour
         {
             rb.AddForce(jumpPower, ForceMode.VelocityChange);
         }
-        if (Input.GetKey(temp))
+
+        if (rb.linearVelocity.magnitude > 1)
         {
             counter++;
-            if (counter >= 25)
+            if (counter > 25)
             {
                 isSprinting = true;
             }
@@ -96,6 +96,11 @@ public class playerMovement : MonoBehaviour
         {
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
+        }
+
+        if(hIn == 0 && vIn == 0)
+        {
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 5.0f);
         }
     }
 
