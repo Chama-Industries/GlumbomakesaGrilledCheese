@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class playerMovement : MonoBehaviour
@@ -27,6 +28,7 @@ public class playerMovement : MonoBehaviour
     public TextMeshProUGUI theScore;
     private collectibleData playerScore = new collectibleData();
     private int scoreCheck;
+
 
     // Start is called before the first frame update
     void Start()
