@@ -24,10 +24,9 @@ public class playerMovement : MonoBehaviour
     // Controls
     public KeyCode jump = KeyCode.Space;
 
-    // Variables to Control & Display the Player's Score
-    public TextMeshProUGUI theScore;
-    private collectibleData playerScore = new collectibleData();
-    private int scoreCheck;
+    // Booleans to control Reaction Images based on player Speed
+    // Think like a collection of booleans that all respond to the same call and return whichever one is active
+    // IEnumerator Coroutine?
 
 
     // Start is called before the first frame update
@@ -35,8 +34,6 @@ public class playerMovement : MonoBehaviour
     {
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
-        // Score Reference
-        scoreCheck = playerScore.getScore();
         // Setting the player's distance from the ground
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
@@ -45,7 +42,6 @@ public class playerMovement : MonoBehaviour
     void Update()
     {
         playerMove();
-        updateScore();
     }
 
     // FixedUpdate is called at fixed intervals
@@ -59,7 +55,7 @@ public class playerMovement : MonoBehaviour
         if (rb.linearVelocity.magnitude > 1)
         {
             counter++;
-            if (counter > 25)
+            if (counter > 100)
             {
                 isSprinting = true;
             }
@@ -84,14 +80,12 @@ public class playerMovement : MonoBehaviour
         rb.linearVelocity += movementD * speed * Time.deltaTime;
         if (rb.linearVelocity.magnitude > 10 && !isSprinting)
         {
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 25.0f);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 20.0f);
         }
         if (isSprinting && rb.linearVelocity.magnitude > 10)
         {
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 75.0f);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 60.0f);
         }
-
-        //transform.Translate(movementD * speed * Time.deltaTime, Space.World);
 
         // Rotate the player in the direction of movement
         if (movementD != Vector3.zero)
@@ -102,16 +96,8 @@ public class playerMovement : MonoBehaviour
 
         if(hIn == 0 && vIn == 0)
         {
+            //Stopping is too abrubt, maybe have a loop continuiously clamp down instead of hard clamping?
             rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 5.0f);
-        }
-    }
-
-    void updateScore()
-    {
-        if (scoreCheck != playerScore.getScore())
-        {
-            theScore.text = "Score: " + playerScore.getScore() + " ";
-            scoreCheck = playerScore.getScore();
         }
     }
 
