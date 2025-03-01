@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public class collectibleData
 {
@@ -9,7 +8,11 @@ public class collectibleData
     }
     public void addScore(int inScore)
     {
-        currentScore = currentScore + inScore;
+        currentScore += inScore;
     }
 
+    public void subtractScore(int inScore)
+    {
+        currentScore -= inScore;
+    }
 }
