@@ -40,7 +40,7 @@ public class HUDManager : MonoBehaviour
             {
                 scoreDecreased = true;
             }
-                theScore.text = " " + playerScore.getScore() + "$";
+                theScore.text = " " + playerScore.getScore() + ".00$";
             scoreCheck = playerScore.getScore();
             glumboMeter.value = playerScore.getScore();
         }
