@@ -8,9 +8,18 @@ public class basicEnemyAI : MonoBehaviour
     protected NavMeshAgent enemy;
     protected collectibleData playerScore = new collectibleData();
     public int scoreDamage = 0;
+    // Rigidbody
+    private Rigidbody rb;
 
     protected virtual void Start()
     {
+        //ensures that we have the *ONLY* player in the game. Allows for enemies to create other enemies and saves me a headache
+        if(player == null)
+        {
+            player = GameObject.FindWithTag("player");
+        }
+        // Get Rigidbody component
+        rb = GetComponent<Rigidbody>();
         enemy = GetComponent<NavMeshAgent>();
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
     }
@@ -31,8 +40,9 @@ public class basicEnemyAI : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "enemy")
+        if (collision.gameObject.tag == "player")
         {
+            rb.AddForce(collision.GetContact(0).normal * 10.0f, ForceMode.Impulse);
             playerScore.subtractScore(scoreDamage);
         }
     }

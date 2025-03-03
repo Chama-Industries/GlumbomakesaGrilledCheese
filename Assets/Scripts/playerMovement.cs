@@ -7,10 +7,11 @@ public class playerMovement : MonoBehaviour
     // Controls the speed of the player
     private float speed = 25.0f;
     private float rotateSpeed = 180f;
-    private Vector3 jumpPower = new Vector3(0, 10.0f, 0);
+    private Vector3 jumpPower = new Vector3(0, 12.0f, 0);
     private Vector3 fallingPower = new Vector3(0, -0.4f, 0);
     private bool isSprinting = false;
     private int counter = 0;
+    //private float lastClamp;
 
     // Rigidbody
     private Rigidbody rb;
@@ -80,11 +81,13 @@ public class playerMovement : MonoBehaviour
         rb.linearVelocity += movementD * speed * Time.deltaTime;
         if (rb.linearVelocity.magnitude > 10 && !isSprinting)
         {
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 20.0f);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 12.5f);
+            //lastClamp = 20.0f;
         }
         if (isSprinting && rb.linearVelocity.magnitude > 10)
         {
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 60.0f);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 40.0f);
+            //lastClamp = 60.0f;
         }
 
         // Rotate the player in the direction of movement
@@ -94,11 +97,14 @@ public class playerMovement : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
         }
 
-        if(hIn == 0 && vIn == 0)
+        /*doesn't work, overriden by previous statements
+        if (hIn == 0 && vIn == 0)
         {
+            lastClamp = lastClamp * 0.75f;
             //Stopping is too abrubt, maybe have a loop continuiously clamp down instead of hard clamping?
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, 5.0f);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, lastClamp);
         }
+        */
     }
 
     // Using a Raycast to check if the player is able to jump, aka no more flying
