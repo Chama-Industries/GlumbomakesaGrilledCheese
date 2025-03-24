@@ -7,9 +7,9 @@ public class playerMovement : MonoBehaviour
     // Controls the speed of the player
     private float speed = 35.0f;
     private float rotateSpeed = 180f;
-    private Vector3 jumpPower = new Vector3(0, 15.0f, 0);
-    private float fallingPower = 3.0f;
-    private float maxSpeed = 20.0f;
+    private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
+    private float fallingPower = 5.0f;
+    private float maxSpeed = 50.0f;
 
     // Rigidbody
     private Rigidbody rb;
@@ -23,7 +23,8 @@ public class playerMovement : MonoBehaviour
 
     // Controls
     public KeyCode jump = KeyCode.Space;
-    public KeyCode sprint = KeyCode.Mouse1;
+    public KeyCode sprint = KeyCode.LeftShift;
+    public KeyCode special = KeyCode.Mouse0;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +42,7 @@ public class playerMovement : MonoBehaviour
     {
         playerDMove();
         playerVMove();
+        playerAbility();
     }
 
     // FixedUpdate is called at fixed intervals
@@ -67,7 +69,8 @@ public class playerMovement : MonoBehaviour
         movementD.Normalize();
 
         rb.linearVelocity += movementD * speed * Time.deltaTime;
-        if (rb.linearVelocity.magnitude > 10 && isGrounded())
+        // This still doesnt feel good, find another way to cap player speed without forcefully halting momentum
+        if (rb.linearVelocity.magnitude > 50 && isGrounded())
         {
             //rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxSpeed);
         }
@@ -89,7 +92,7 @@ public class playerMovement : MonoBehaviour
             rb.AddForce(jumpPower, ForceMode.VelocityChange);
         }
         // Code to make movement feel more weighty/less floaty
-        if(rb.linearVelocity.y < 0 && !isGrounded())
+        if(rb.linearVelocity.y < 1 && !isGrounded())
         {
             rb.linearVelocity += Physics.gravity * fallingPower * Time.deltaTime;
             rb.linearVelocity.Normalize();
@@ -100,6 +103,14 @@ public class playerMovement : MonoBehaviour
     public bool isGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
+    }
+
+    void playerAbility()
+    {
+        if(Input.GetKey(special))
+        {
+            //this will do something later
+        }
     }
 }
 
