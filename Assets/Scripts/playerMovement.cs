@@ -5,11 +5,15 @@ using TMPro;
 public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
-    private float speed = 35.0f;
+    private float speed = 25.0f;
     private float rotateSpeed = 180f;
     private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
     private float fallingPower = 5.0f;
     private float maxSpeed = 50.0f;
+    // Variables related to the Power Ups the player can aquire
+    public colectibleAbility powerUp;
+    public bool canKill = false;
+    private bool multOnce = true;
 
     // Rigidbody
     private Rigidbody rb;
@@ -24,7 +28,7 @@ public class playerMovement : MonoBehaviour
     // Controls
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftShift;
-    public KeyCode special = KeyCode.Mouse0;
+    public KeyCode special = KeyCode.E;
 
     // Start is called before the first frame update
     void Start()
@@ -107,10 +111,28 @@ public class playerMovement : MonoBehaviour
 
     void playerAbility()
     {
-        if(Input.GetKey(special))
+        if (Input.GetKey(special))
         {
-            //this will do something later
+            canKill = true;
+            if(powerUp != null && multOnce)
+            {
+                speed = speed * powerUp.speedMult;
+                jumpPower = jumpPower * powerUp.jumpMult;
+                multOnce = false;
+            }
         }
+        else
+        {
+            canKill = false;
+            speed = 25.0f;
+            jumpPower = new Vector3(0f, 14.0f, 0f);
+            multOnce = true;
+        }
+    }
+
+    public void setPlayerAbility(GameObject g)
+    {
+        powerUp = g.GetComponent<colectibleAbility>();
     }
 }
 
