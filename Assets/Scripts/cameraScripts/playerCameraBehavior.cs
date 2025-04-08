@@ -1,9 +1,9 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class playerCameraBehavior : MonoBehaviour
 {
     public GameObject player;
-
     private Vector3 offset;
 
     void Start()
@@ -14,8 +14,17 @@ public class playerCameraBehavior : MonoBehaviour
     void LateUpdate()
     {
         transform.position = player.transform.position + offset;
-        transform.rotation = player.transform.rotation;
         transform.LookAt(player.transform.position);
+        Debug.Log(offset);
     }
 
+
+    void OnTriggerEnter(Collider onHit)
+    {
+        if (onHit.tag == "cameraData")
+        {
+            offset.x = onHit.GetComponent<cameraRotationHolder>().desiredX;
+            offset.z = onHit.GetComponent<cameraRotationHolder>().desiredZ;
+        }
+    }
 }

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 201321571166227617}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 63.882523, y: 11.299679, z: -32.157707}
+  m_LocalPosition: {x: 35, y: 0, z: -35}
   m_LocalScale: {x: 20, y: 2, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -171,7 +171,7 @@ Transform:
   m_GameObject: {fileID: 1823108821367840304}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.882523, y: 11.299679, z: 37.842293}
+  m_LocalPosition: {x: 10, y: 0, z: 35}
   m_LocalScale: {x: 70, y: 2, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 1007559929341690869}
   - component: {fileID: 8157945792786762800}
   m_Layer: 0
-  m_Name: road (1)
+  m_Name: roadTR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 5749746523967594676}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 28.882523, y: 11.299679, z: 2.8422947}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 9, y: 1, z: 9}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -388,7 +388,7 @@ Transform:
   m_GameObject: {fileID: 8957800872724716881}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.1174774, y: 11.299679, z: 3.0422916}
+  m_LocalPosition: {x: -35, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 2, z: 90}
   m_ConstrainProportionsScale: 0
   m_Children: []
