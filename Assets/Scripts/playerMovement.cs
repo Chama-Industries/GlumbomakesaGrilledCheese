@@ -30,6 +30,12 @@ public class playerMovement : MonoBehaviour
     public KeyCode sprint = KeyCode.LeftShift;
     public KeyCode special = KeyCode.E;
 
+    // temporary variables related to ending the game
+    private bool canControl = true;
+    public GameObject playerHUD;
+    public GameObject endingHUD;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,9 +50,12 @@ public class playerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerDMove();
-        playerVMove();
-        playerAbility();
+        if (canControl)
+        {
+            playerDMove();
+            playerVMove();
+            playerAbility();
+        }
     }
 
     // FixedUpdate is called at fixed intervals
@@ -133,6 +142,17 @@ public class playerMovement : MonoBehaviour
     public void setPlayerAbility(GameObject g)
     {
         powerUp = g.GetComponent<colectibleAbility>();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("levelEnd"))
+        {
+            canControl = false;
+            playerHUD.SetActive(false);
+            endingHUD.SetActive(true);
+            this.gameObject.SetActive(false);
+        }
     }
 }
 
