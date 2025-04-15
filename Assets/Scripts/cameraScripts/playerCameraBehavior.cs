@@ -15,7 +15,6 @@ public class playerCameraBehavior : MonoBehaviour
     {
         transform.position = player.transform.position + offset;
         transform.LookAt(player.transform.position);
-        Debug.Log(offset);
     }
 
 
