@@ -42,7 +42,7 @@ public class playerMovement : MonoBehaviour
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
         // Get Animator component
-        ani = GetComponent<Animator>();
+        ani = GetComponentInChildren<Animator>();
         // Setting the player's distance from the ground
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
@@ -91,6 +91,7 @@ public class playerMovement : MonoBehaviour
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
         {
+            ani.Play("glumboRunCycle");
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
         }
@@ -102,6 +103,7 @@ public class playerMovement : MonoBehaviour
         // Code to apply a vertical force to the player
         if (Input.GetKeyDown(jump) && isGrounded())
         {
+            ani.Play("glumboJump");
             rb.AddForce(jumpPower, ForceMode.VelocityChange);
         }
         // Code to make movement feel more weighty/less floaty
