@@ -156,5 +156,10 @@ public class playerMovement : MonoBehaviour
             this.gameObject.SetActive(false);
         }
     }
+
+    public void haltPlayer()
+    {
+        rb.linearVelocity = Vector3.zero;
+    }
 }
 
