@@ -290,7 +290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4546729074532370765}
   m_Layer: 5
-  m_Name: Handle Slide Area
+  m_Name: meterIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 3950961463499369980}
   - component: {fileID: 4497344769772895689}
   m_Layer: 5
-  m_Name: Background
+  m_Name: meterBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -731,7 +731,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1871701589549043758}
   m_Layer: 5
-  m_Name: Fill Area
+  m_Name: meter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
