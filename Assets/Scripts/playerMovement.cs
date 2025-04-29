@@ -43,6 +43,8 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         // Get Animator component
         ani = GetComponentInChildren<Animator>();
+        ani.SetFloat("playerVelocity", rb.linearVelocity.magnitude);
+        ani.SetBool("playerJump", !isGrounded());
         // Setting the player's distance from the ground
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
@@ -118,6 +120,11 @@ public class playerMovement : MonoBehaviour
     public bool isGrounded()
     {
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
+    }
+
+    public bool isFalling()
+    {
+        return rb.linearVelocity.y < 0;
     }
 
     void playerAbility()

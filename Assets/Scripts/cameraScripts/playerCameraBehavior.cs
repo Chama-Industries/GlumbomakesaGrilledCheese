@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 public class playerCameraBehavior : MonoBehaviour
 {
     public GameObject player;
-    private Vector3 offset;
+    public Vector3 offset;
     private Vector3 swivelOffset;
 
 
@@ -23,22 +23,12 @@ public class playerCameraBehavior : MonoBehaviour
             swivelOffset.y = Mathf.Clamp(swivelOffset.y, 0.0f, 80.0f);
             Quaternion rotationSet = Quaternion.Euler(swivelOffset.y, swivelOffset.x, 0.0f);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rotationSet, Time.deltaTime * 10);
-            transform.position = player.transform.position + offset;
+            transform.position = player.transform.position + new Vector3 (0, 4.5f, 0);
         }
         else
         {
             transform.position = player.transform.position + offset;
             transform.LookAt(player.transform.position);
-        }
-    }
-
-
-    void OnTriggerEnter(Collider onHit)
-    {
-        if (onHit.tag == "cameraData")
-        {
-            offset.x = onHit.GetComponent<cameraRotationHolder>().desiredX;
-            offset.z = onHit.GetComponent<cameraRotationHolder>().desiredZ;
         }
     }
 }
