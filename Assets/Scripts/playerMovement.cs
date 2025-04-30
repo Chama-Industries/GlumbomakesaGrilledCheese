@@ -9,7 +9,6 @@ public class playerMovement : MonoBehaviour
     private float rotateSpeed = 180f;
     private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
     private float fallingPower = 5.0f;
-    private float maxSpeed = 50.0f;
     // Variables related to the Power Ups the player can aquire
     public colectibleAbility powerUp;
     public bool canKill = false;
@@ -27,8 +26,7 @@ public class playerMovement : MonoBehaviour
 
     // Controls
     public KeyCode jump = KeyCode.Space;
-    public KeyCode sprint = KeyCode.LeftShift;
-    public KeyCode special = KeyCode.E;
+    public KeyCode special = KeyCode.Mouse0;
 
     // temporary variables related to ending the game
     private bool canControl = true;
@@ -60,16 +58,11 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-    // FixedUpdate is called at fixed intervals
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if(Input.GetKey(sprint))
+        if (Input.GetKey(KeyCode.Escape))
         {
-            maxSpeed = maxSpeed * 2;
-        }
-        else
-        {
-            maxSpeed = 20.0f;
+            Application.Quit();
         }
     }
 

@@ -10,7 +10,7 @@ public class colectibleAbility : MonoBehaviour
     // The Paint Can will rotate
     private void FixedUpdate()
     {
-        gameObject.transform.Rotate(0f, 0.25f, 0f, Space.Self);
+        gameObject.transform.Rotate(0.01f, 0.25f, 0.01f, Space.Self);
     }
 
     void OnTriggerEnter(Collider onHit)
