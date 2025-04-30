@@ -9,7 +9,9 @@ public class basicEnemyAI : MonoBehaviour
     protected collectibleData playerScore = new collectibleData();
     public int scoreDamage = 0;
     // Rigidbody
-    private Rigidbody rb;
+    protected Rigidbody rb;
+    // Animator
+    protected Animator ani;
 
     protected virtual void Start()
     {
@@ -20,6 +22,11 @@ public class basicEnemyAI : MonoBehaviour
         }
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
+        if(GetComponentInChildren<Animator>())
+        {
+            ani = GetComponentInChildren<Animator>();
+            ani.Play("idle");
+        }
         enemy = GetComponent<NavMeshAgent>();
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
     }

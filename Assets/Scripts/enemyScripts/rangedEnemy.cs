@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class rangedEnemy : basicEnemyAI
@@ -11,19 +12,26 @@ public class rangedEnemy : basicEnemyAI
     protected override void Update()
     {
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (distanceFromPlayer < 25.0f)
+        if (distanceFromPlayer < 30.0f && !hasFired)
         {
-            if (distanceFromPlayer < 10.0f && !hasFired)
-            {
-                shoot();
-            }
-            pursuit();
+            shoot();
+            enemy.ResetPath();
+            enemy.velocity = Vector3.zero;
+        }
+        else if (distanceFromPlayer < 50.0f)
+        {
+            enemy.SetDestination(player.transform.position);
+        }
+        else
+        {
+            enemy.ResetPath();
+            enemy.velocity = Vector3.zero;
         }
     }
 
     void FixedUpdate()
     {
-        if (wait == 400)
+        if (wait == 300 && hasFired)
         {
             wait = 0;
             hasFired = false;
@@ -36,8 +44,9 @@ public class rangedEnemy : basicEnemyAI
 
     void shoot()
     {
+        bulletOrigin.LookAt(player.transform.position);
         GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
         hasFired = true;
-        Destroy(g, 4.0f);
+        Destroy(g, 3.0f);
     }
 }
