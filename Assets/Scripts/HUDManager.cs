@@ -74,7 +74,6 @@ public class HUDManager : MonoBehaviour
             theScore.text = " " + playerScore.getScore() + ".00$";
             scoreCheck = playerScore.getScore();
             glumboMeter.value = playerScore.getScore();
-            endingScore.text = "Score: " + playerScore.getScore() + ".00$";
         }
     }
     void positiveGlumboReaction()
