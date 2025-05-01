@@ -3,9 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class warpZone : MonoBehaviour
 {
+    // Variables for logic
     public bool staysInScene = true;
     public Vector3 currentWorldDestination;
     public static Vector3 returnSpot;
+    // reference to hold the player so we do stuff when it hits triggers
     private GameObject thePlayer;
 
     private void Start()
@@ -16,6 +18,7 @@ public class warpZone : MonoBehaviour
         }
     }
 
+    // If the player hits the trigger it'll teleport the player to given location or another scene.
     void OnTriggerEnter(Collider onHit)
     {
         if (onHit.tag == "player")

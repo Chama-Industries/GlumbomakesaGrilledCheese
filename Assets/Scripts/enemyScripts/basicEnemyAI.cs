@@ -22,6 +22,7 @@ public class basicEnemyAI : MonoBehaviour
         }
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
+        // If an animator component exists, get it and assign it to the chosen variable
         if(GetComponentInChildren<Animator>())
         {
             ani = GetComponentInChildren<Animator>();
@@ -33,6 +34,7 @@ public class basicEnemyAI : MonoBehaviour
 
     protected virtual void Update()
     {
+        // Constant check to see how far away the player is. Probably could be replaced by a Raycast
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         if (distanceFromPlayer < 25.0f)
         {
@@ -40,11 +42,13 @@ public class basicEnemyAI : MonoBehaviour
         }
     }
 
+    // Follow the Player (and ram into them)
     protected virtual void pursuit()
     {
         enemy.SetDestination(player.transform.position);
     }
 
+    // Handles collisions and if the player can kill them or not, also prevents multiple collisions at once nuking the player's score
     protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)

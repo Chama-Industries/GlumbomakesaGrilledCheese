@@ -61,11 +61,14 @@ public class playerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // If everything is on fire hit the explode button
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
         }
+        // Stops Jump Animation from becoming the Idle animation for whatever reason.
         playJumpAni = !isGrounded();
+        // Stop people falling into the void if they somehow get there.
         if (this.transform.position .y < -150) 
         {
             haltPlayer();
@@ -84,11 +87,12 @@ public class playerMovement : MonoBehaviour
         movementD.Normalize();
 
         rb.linearVelocity += movementD * speed * Time.deltaTime;
-        // This still doesnt feel good, find another way to cap player speed without forcefully halting momentum
+        /* This still doesnt feel good, find another way to cap player speed without forcefully halting momentum
         if (rb.linearVelocity.magnitude > 50 && isGrounded())
         {
-            //rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxSpeed);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxSpeed);
         }
+        */
 
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
@@ -122,11 +126,13 @@ public class playerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
     }
 
+    // Unused Method for a check to playing a Falling Animation
     public bool isFalling()
     {
         return rb.linearVelocity.y < 0;
     }
 
+    // Makes Mouse 0 do things when pressed. Right now it augments Speed/Jump if you have a Paint Can
     void playerAbility()
     {
         if (Input.GetKey(special))
@@ -148,11 +154,13 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    // Get the Game Object with the script.
     public void setPlayerAbility(GameObject g)
     {
         powerUp = g.GetComponent<colectibleAbility>();
     }
 
+    // Ends the Level
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("levelEnd"))
@@ -164,6 +172,7 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    // Method for me to call to just stop the player whenever
     public void haltPlayer()
     {
         rb.linearVelocity = Vector3.zero;
