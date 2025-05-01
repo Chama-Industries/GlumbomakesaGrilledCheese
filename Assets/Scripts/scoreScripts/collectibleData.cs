@@ -1,8 +1,8 @@
 
 public class collectibleData
 {
-    private static int currentScore = 0;
-    public int getScore()
+    private static double currentScore = 0;
+    public double getScore()
     {
         return currentScore;
     }

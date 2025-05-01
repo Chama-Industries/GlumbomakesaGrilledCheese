@@ -47,14 +47,14 @@ public class basicEnemyAI : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "player" && !player.GetComponent<playerMovement>().canKill)
-        {
-            rb.AddForce(collision.GetContact(0).normal * 10.0f, ForceMode.Impulse);
-            playerScore.subtractScore(scoreDamage);
-        }
-        else if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)
+        if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)
         {
             Destroy(this.gameObject);
+        }
+        else if (collision.gameObject.tag == "player" && !player.GetComponent<playerMovement>().canKill)
+        {
+            rb.AddForce(collision.GetContact(0).normal * 6.0f, ForceMode.Impulse);
+            playerScore.subtractScore(scoreDamage);
         }
     }
 }

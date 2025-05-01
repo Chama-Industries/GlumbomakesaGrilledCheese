@@ -15,7 +15,6 @@ public class rangedEnemy : basicEnemyAI
         if (distanceFromPlayer < 30.0f && !hasFired)
         {
             shoot();
-            enemy.ResetPath();
             enemy.velocity = Vector3.zero;
         }
         else if (distanceFromPlayer < 50.0f)
@@ -31,7 +30,7 @@ public class rangedEnemy : basicEnemyAI
 
     void FixedUpdate()
     {
-        if (wait == 300 && hasFired)
+        if (wait == 200 && hasFired)
         {
             wait = 0;
             hasFired = false;
@@ -44,9 +43,8 @@ public class rangedEnemy : basicEnemyAI
 
     void shoot()
     {
-        bulletOrigin.LookAt(player.transform.position);
+        bulletOrigin.LookAt(player.transform.position + new Vector3(0f, 1f, 0f));
         GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
         hasFired = true;
-        Destroy(g, 3.0f);
     }
 }

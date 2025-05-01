@@ -17,6 +17,7 @@ public class playerMovement : MonoBehaviour
     // Rigidbody
     private Rigidbody rb;
     private Animator ani;
+    private bool playJumpAni = false;
 
     // Variables for a Raycast
     float distanceToGround;
@@ -42,7 +43,7 @@ public class playerMovement : MonoBehaviour
         // Get Animator component
         ani = GetComponentInChildren<Animator>();
         ani.SetFloat("playerVelocity", rb.linearVelocity.magnitude);
-        ani.SetBool("playerJump", !isGrounded());
+        ani.SetBool("playerJump", playJumpAni);
         // Setting the player's distance from the ground
         distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
@@ -60,9 +61,15 @@ public class playerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        playJumpAni = !isGrounded();
+        if (this.transform.position .y < -150) 
+        {
+            haltPlayer();
+            this.transform.position = new Vector3(0f, 10f, 0f);
         }
     }
 

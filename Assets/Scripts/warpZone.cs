@@ -5,13 +5,25 @@ public class warpZone : MonoBehaviour
 {
     public bool staysInScene = true;
     public Vector3 currentWorldDestination;
-    private Vector3 returnSpot;
+    public static Vector3 returnSpot;
     private GameObject thePlayer;
+
+    private void Start()
+    {
+        if (thePlayer == null)
+        {
+           thePlayer = GameObject.FindWithTag("player");
+        }
+    }
 
     void OnTriggerEnter(Collider onHit)
     {
         if (onHit.tag == "player")
         {
+            if (returnSpot == null)
+            {
+                returnSpot = this.transform.position;
+            }
             thePlayer = onHit.gameObject;
             returnSpot = this.transform.position;
             if (staysInScene)
