@@ -31,4 +31,8 @@ public class collectibleData
         }
     }
 
+    public void resetScore()
+    {
+        currentScore = 0;
+    }
 }
