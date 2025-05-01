@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class HUDManager : MonoBehaviour
 {
+    // UI Elements to be assigned manually. Could just get them on Start of Scene using tags, but no time rn
     public Slider glumboMeter;
     private collectibleData playerScore = new collectibleData();
     public TextMeshProUGUI theScore;
@@ -15,6 +16,7 @@ public class HUDManager : MonoBehaviour
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
     public Texture2D[] allReactions = new Texture2D[6];
+    // Variables to control what image is shown
     private bool alternateImage = true;
     private int firstImage = 0;
     private int secondImage = 1;
@@ -33,6 +35,7 @@ public class HUDManager : MonoBehaviour
             currentReaction.texture = allReactions[firstImage];
             alternateImage = false;
         }
+        // Slower alternation for other reactions, changes every 10 frames
         else if (counter % 10 == 0 && resetAt != -1)
         {
             currentReaction.texture = allReactions[secondImage];
@@ -47,7 +50,7 @@ public class HUDManager : MonoBehaviour
             alternateImage = true;
         }
 
-
+        // Ensures default image returns after a reaction happens.
         if (counter == resetAt)
         {
             counter = 0;
@@ -62,7 +65,7 @@ public class HUDManager : MonoBehaviour
     {
         if (scoreCheck != playerScore.getScore())
         {
-            // Check to see if score went up/down and flips the relevant boolean
+            // Check to see if score went up/down and calls the relevant method
             if (playerScore.getScore() - scoreCheck > 0)
             {
                 playerScore.changeScoreMult(0.1);
@@ -73,12 +76,14 @@ public class HUDManager : MonoBehaviour
                 playerScore.changeScoreMult(-0.1);
                 negativeGlumboReaction();
             }
-            theScore.text = playerScore.getScore()/100 + "$";
+            //i fixed it, you're welcome.
+            theScore.text = "$" + playerScore.getScore()/100;
             scoreCheck = playerScore.getScore();
-            glumboMeter.value = (float)playerScore.getScore()/100;
+            glumboMeter.value = (float)playerScore.getScore();
+            // Prevents an assignment error with the HUD in Sub-areas
             if(SceneManager.GetActiveScene().buildIndex == 1)
             {
-                endingScore.text = "Score: " + playerScore.getScore()/100 + "$";
+                endingScore.text = "Score: $" + playerScore.getScore()/100;
             }
         }
     }
@@ -86,6 +91,7 @@ public class HUDManager : MonoBehaviour
     {
         firstImage = 2;
         secondImage = 3;
+        // Sets a manual timer for about 4 seconds before changing back to the base reactions.
         resetAt = counter + 200;
     }
 

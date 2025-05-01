@@ -8,7 +8,7 @@ public class rangedEnemy : basicEnemyAI
     private int wait = 0;
     private bool hasFired = false;
 
-    // Update is called once per frame
+    // Check to see player's location compared to whatever this is attached to. Controls actions the object can take in response to the player
     protected override void Update()
     {
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -28,6 +28,7 @@ public class rangedEnemy : basicEnemyAI
         }
     }
 
+    // Ensures projectiles aren't spammed
     void FixedUpdate()
     {
         if (wait == 200 && hasFired)
@@ -41,6 +42,7 @@ public class rangedEnemy : basicEnemyAI
         }
     }
 
+    // Method for when the Projectile is fired.
     void shoot()
     {
         bulletOrigin.LookAt(player.transform.position + new Vector3(0f, 1f, 0f));
