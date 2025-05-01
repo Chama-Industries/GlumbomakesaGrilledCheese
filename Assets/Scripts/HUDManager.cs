@@ -65,10 +65,12 @@ public class HUDManager : MonoBehaviour
             // Check to see if score went up/down and flips the relevant boolean
             if (playerScore.getScore() - scoreCheck > 0)
             {
+                playerScore.changeScoreMult(0.1);
                 positiveGlumboReaction();
             }
             else
             {
+                playerScore.changeScoreMult(-0.1);
                 negativeGlumboReaction();
             }
             theScore.text = playerScore.getScore()/100 + "$";
