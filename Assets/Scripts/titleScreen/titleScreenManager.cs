@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class titleScreenManager : MonoBehaviour
 {
+    private collectibleData playerScore = new collectibleData();
     public void startGame()
     {
         //Load Scene
@@ -12,6 +13,7 @@ public class titleScreenManager : MonoBehaviour
 
     public void returnToMainMenu()
     {
+        playerScore.resetScore();
         //Load Scene
         SceneManager.LoadScene("titleScreen", LoadSceneMode.Single);
     }

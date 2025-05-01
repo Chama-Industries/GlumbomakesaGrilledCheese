@@ -14,7 +14,7 @@ public class HUDManager : MonoBehaviour
     private double scoreCheck;
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
-    public Texture2D[] allReactions = new Texture2D[4];
+    public Texture2D[] allReactions = new Texture2D[6];
     private bool alternateImage = true;
     private int firstImage = 0;
     private int secondImage = 1;
