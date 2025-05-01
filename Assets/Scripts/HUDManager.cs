@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HUDManager : MonoBehaviour
 {
@@ -10,9 +11,7 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI theScore;
     public TextMeshProUGUI endingScore;
     //Variables used to check the state of the player's score in order to have the HUD react properly
-    private int scoreCheck;
-    private bool scoreIncreased = false;
-    private bool scoreDecreased = false;
+    private double scoreCheck;
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
     public Texture2D[] allReactions = new Texture2D[4];
@@ -22,40 +21,41 @@ public class HUDManager : MonoBehaviour
 
     //temporary counter variables to reset the reaction image to the default ones
     private int counter = 0;
-    private int resetAt = 125;
+    private int resetAt = -1;
 
     private void FixedUpdate()
     {
         updateScore();
         // Ideally this would be the only code for alternative images giving a false sense of animation (besides I think it looks cool)
         // Find a way to just swap pointers for what image is currently being displayed
-        if(alternateImage && counter % 25 == 0)
+        if (alternateImage)
         {
             currentReaction.texture = allReactions[firstImage];
             alternateImage = false;
         }
-        else if(counter % 40 == 0) 
+        else if (counter % 10 == 0 && resetAt != -1)
+        {
+            currentReaction.texture = allReactions[secondImage];
+            if (counter % 20 == 0)
+            {
+                alternateImage = !alternateImage;
+            }
+        }
+        else if (resetAt == -1)
         {
             currentReaction.texture = allReactions[secondImage];
             alternateImage = true;
         }
 
-        if (scoreIncreased)
+
+        if (counter == resetAt)
         {
-            positiveGlumboReaction();
-            scoreIncreased = false;
-        }
-        if (scoreDecreased)
-        {
-            negativeGlumboReaction();
-            scoreDecreased = false;
-        }
-        counter++;
-        if (counter >= resetAt)
-        {
+            counter = 0;
             firstImage = 0;
             secondImage = 1;
+            resetAt = -1;
         }
+        counter++;
     }
 
     void updateScore()
@@ -63,27 +63,34 @@ public class HUDManager : MonoBehaviour
         if (scoreCheck != playerScore.getScore())
         {
             // Check to see if score went up/down and flips the relevant boolean
-            if (playerScore.getScore() - scoreCheck > 0 || playerScore.getScore() - scoreCheck < 0)
+            if (playerScore.getScore() - scoreCheck > 0)
             {
-                scoreIncreased = true;
+                positiveGlumboReaction();
             }
             else
             {
-                scoreDecreased = true;
+                negativeGlumboReaction();
             }
-            theScore.text = " " + playerScore.getScore() + ".00$";
+            theScore.text = playerScore.getScore()/100 + "$";
             scoreCheck = playerScore.getScore();
-            glumboMeter.value = playerScore.getScore();
+            glumboMeter.value = (float)playerScore.getScore()/100;
+            if(SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                endingScore.text = "Score: " + playerScore.getScore()/100 + "$";
+            }
         }
     }
-    void positiveGlumboReaction()
+    private void  positiveGlumboReaction()
     {
         firstImage = 2;
         secondImage = 3;
+        resetAt = counter + 200;
     }
 
-    void negativeGlumboReaction()
+    private void negativeGlumboReaction()
     {
-
+        firstImage = 4;
+        secondImage = 5;
+        resetAt = counter + 200;
     }
 }

@@ -9,7 +9,9 @@ public class basicEnemyAI : MonoBehaviour
     protected collectibleData playerScore = new collectibleData();
     public int scoreDamage = 0;
     // Rigidbody
-    private Rigidbody rb;
+    protected Rigidbody rb;
+    // Animator
+    protected Animator ani;
 
     protected virtual void Start()
     {
@@ -20,6 +22,11 @@ public class basicEnemyAI : MonoBehaviour
         }
         // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
+        if(GetComponentInChildren<Animator>())
+        {
+            ani = GetComponentInChildren<Animator>();
+            ani.Play("idle");
+        }
         enemy = GetComponent<NavMeshAgent>();
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
     }
@@ -40,14 +47,14 @@ public class basicEnemyAI : MonoBehaviour
 
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "player" && !player.GetComponent<playerMovement>().canKill)
-        {
-            rb.AddForce(collision.GetContact(0).normal * 10.0f, ForceMode.Impulse);
-            playerScore.subtractScore(scoreDamage);
-        }
-        else if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)
+        if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)
         {
             Destroy(this.gameObject);
+        }
+        else if (collision.gameObject.tag == "player" && !player.GetComponent<playerMovement>().canKill)
+        {
+            rb.AddForce(collision.GetContact(0).normal * 6.0f, ForceMode.Impulse);
+            playerScore.subtractScore(scoreDamage);
         }
     }
 }

@@ -100,8 +100,7 @@ MonoBehaviour:
   powerUp: {fileID: 0}
   canKill: 0
   jump: 32
-  sprint: 304
-  special: 101
+  special: 323
   playerHUD: {fileID: 0}
   endingHUD: {fileID: 0}
 --- !u!1001 &5918115556803712629
