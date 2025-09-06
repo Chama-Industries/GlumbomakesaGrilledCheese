@@ -5,14 +5,17 @@ using TMPro;
 public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
-    private float speed = 25.0f;
+    public float speed = 10.0f;
+    public float maxWalkSpeed = 20.0f;
+    public float maxRunSpeed = 75.0f;
+    private float runDelayCounter = 0;
     private float rotateSpeed = 180f;
-    private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
-    private float fallingPower = 5.0f;
+    private Vector3 jumpPower = new Vector3(0, 20.0f, 0);
+    private Vector3 fallingPower = new Vector3(0, -5.0f, 0);
+
     // Variables related to the Power Ups the player can aquire
     public colectibleAbility powerUp;
     public bool canKill = false;
-    private bool multOnce = true;
 
     // Rigidbody
     private Rigidbody rb;
@@ -26,8 +29,17 @@ public class playerMovement : MonoBehaviour
     Vector3 movementD;
 
     // Controls
+    // Directional Keys
+    public KeyCode forward = KeyCode.W;
+    public KeyCode backward = KeyCode.S;
+    public KeyCode left = KeyCode.A;
+    public KeyCode right = KeyCode.D;
+    // Verticality Keys
     public KeyCode jump = KeyCode.Space;
-    public KeyCode special = KeyCode.Mouse0;
+    public KeyCode fall = KeyCode.LeftShift;
+    // Combat Keys
+    public KeyCode attack = KeyCode.Mouse0;
+    public KeyCode special = KeyCode.Mouse1;
 
     // temporary variables related to ending the game
     private bool canControl = true;
@@ -56,6 +68,7 @@ public class playerMovement : MonoBehaviour
             playerDMove();
             playerVMove();
             playerAbility();
+            playerAttack();
         }
     }
 
@@ -68,7 +81,8 @@ public class playerMovement : MonoBehaviour
         }
         // Stops Jump Animation from becoming the Idle animation for whatever reason.
         playJumpAni = !isGrounded();
-        // Stop people falling into the void if they somehow get there.
+
+        // Stop people falling into the void if they somehow get there. REMOVE LATER
         if (this.transform.position .y < -150) 
         {
             haltPlayer();
@@ -84,15 +98,23 @@ public class playerMovement : MonoBehaviour
 
         // Adjusted movement direction based on camera or player orientation
         movementD = new Vector3(vIn, 0, -hIn);
+        // Keep Force Multiplication out of the initial movement directional calculation
         movementD.Normalize();
 
-        rb.linearVelocity += movementD * speed * Time.deltaTime;
-        /* This still doesnt feel good, find another way to cap player speed without forcefully halting momentum
-        if (rb.linearVelocity.magnitude > 50 && isGrounded())
+        rb.AddForce(movementD * speed, ForceMode.Acceleration);
+
+        runDelayCounter += Time.deltaTime;
+        if (rb.linearVelocity.magnitude > maxWalkSpeed)
         {
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxSpeed);
+            //rb.linearDamping = 2;
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxWalkSpeed);
         }
-        */
+        // use timer to make sure player is moving for a bit
+        else if (rb.linearVelocity.magnitude > maxRunSpeed && runDelayCounter > 2)
+        {
+            //rb.linearDamping = 1;
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxRunSpeed);
+        }
 
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
@@ -101,7 +123,13 @@ public class playerMovement : MonoBehaviour
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
         }
+        else
+        {
+            // Resets the delay to the Player's speed increasing when moving for a period of time.
+            runDelayCounter = 0;
+        }
     }
+
 
     // Basic Vertical Movement
     void playerVMove()
@@ -112,11 +140,29 @@ public class playerMovement : MonoBehaviour
             ani.Play("glumboJump");
             rb.AddForce(jumpPower, ForceMode.VelocityChange);
         }
-        // Code to make movement feel more weighty/less floaty
-        if(rb.linearVelocity.y < 1 && !isGrounded())
+        if(Input.GetKey(fall))
         {
-            rb.linearVelocity += Physics.gravity * fallingPower * Time.deltaTime;
-            rb.linearVelocity.Normalize();
+            rb.AddForce(fallingPower, ForceMode.Acceleration);
+        }
+    }
+
+    void playerAttack()
+    {
+        if(Input.GetKeyDown(attack))
+        {
+            //instantiate a circle
+        }
+    }
+
+    // Ends the Level
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("levelEnd"))
+        {
+            canControl = false;
+            playerHUD.SetActive(false);
+            endingHUD.SetActive(true);
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -132,25 +178,12 @@ public class playerMovement : MonoBehaviour
         return rb.linearVelocity.y < 0;
     }
 
-    // Makes Mouse 0 do things when pressed. Right now it augments Speed/Jump if you have a Paint Can
+    // Makes Mouse 0 do things when pressed
     void playerAbility()
     {
         if (Input.GetKey(special))
         {
-            canKill = true;
-            if(powerUp != null && multOnce)
-            {
-                speed = speed * powerUp.speedMult;
-                jumpPower = jumpPower * powerUp.jumpMult;
-                multOnce = false;
-            }
-        }
-        else
-        {
-            canKill = false;
-            speed = 25.0f;
-            jumpPower = new Vector3(0f, 14.0f, 0f);
-            multOnce = true;
+            Debug.Log(rb.linearVelocity);
         }
     }
 
@@ -158,18 +191,6 @@ public class playerMovement : MonoBehaviour
     public void setPlayerAbility(GameObject g)
     {
         powerUp = g.GetComponent<colectibleAbility>();
-    }
-
-    // Ends the Level
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("levelEnd"))
-        {
-            canControl = false;
-            playerHUD.SetActive(false);
-            endingHUD.SetActive(true);
-            this.gameObject.SetActive(false);
-        }
     }
 
     // Method for me to call to just stop the player whenever
