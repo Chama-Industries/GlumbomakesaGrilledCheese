@@ -6,16 +6,18 @@ public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
     public float speed = 10.0f;
-    public float maxWalkSpeed = 20.0f;
-    public float maxRunSpeed = 75.0f;
+    private float maxWalkSpeed = 20.0f;
+    private float maxRunSpeed = 50.0f;
     private float runDelayCounter = 0;
+    private float runDelay = 5;
     private float rotateSpeed = 180f;
-    private Vector3 jumpPower = new Vector3(0, 20.0f, 0);
+    private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
     private Vector3 fallingPower = new Vector3(0, -5.0f, 0);
 
     // Variables related to the Power Ups the player can aquire
+    public Transform attackOrigin;
+    public GameObject attackObject;
     public colectibleAbility powerUp;
-    public bool canKill = false;
 
     // Rigidbody
     private Rigidbody rb;
@@ -72,6 +74,7 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    // currently houses random things
     private void FixedUpdate()
     {
         // If everything is on fire hit the explode button
@@ -83,7 +86,7 @@ public class playerMovement : MonoBehaviour
         playJumpAni = !isGrounded();
 
         // Stop people falling into the void if they somehow get there. REMOVE LATER
-        if (this.transform.position .y < -150) 
+        if (this.transform.position.y < -150) 
         {
             haltPlayer();
             this.transform.position = new Vector3(0f, 10f, 0f);
@@ -101,31 +104,56 @@ public class playerMovement : MonoBehaviour
         // Keep Force Multiplication out of the initial movement directional calculation
         movementD.Normalize();
 
+        // Where we move the player
         rb.AddForce(movementD * speed, ForceMode.Acceleration);
 
-        runDelayCounter += Time.deltaTime;
-        if (rb.linearVelocity.magnitude > maxWalkSpeed)
+        //really ugly code keeping the player from going too fast (less effective vs diagonals)
+        if(rb.linearVelocity.x > maxWalkSpeed && runDelayCounter < runDelay)
         {
-            //rb.linearDamping = 2;
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxWalkSpeed);
+            rb.linearVelocity = new Vector3(maxWalkSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
         }
-        // use timer to make sure player is moving for a bit
-        else if (rb.linearVelocity.magnitude > maxRunSpeed && runDelayCounter > 2)
+        else if (rb.linearVelocity.x > maxRunSpeed)
         {
-            //rb.linearDamping = 1;
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxRunSpeed);
+            rb.linearVelocity = new Vector3(maxRunSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
         }
+        if (rb.linearVelocity.x < -maxWalkSpeed && runDelayCounter < runDelay)
+        {
+            rb.linearVelocity = new Vector3(-maxWalkSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
+        else if (rb.linearVelocity.x < -maxRunSpeed)
+        {
+            rb.linearVelocity = new Vector3(-maxRunSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
+        }
+
+
+        if (rb.linearVelocity.z > maxWalkSpeed && runDelayCounter < runDelay)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxWalkSpeed);
+        }
+        else if(rb.linearVelocity.z > maxRunSpeed)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxRunSpeed);
+        }
+        if (rb.linearVelocity.z < -maxWalkSpeed && runDelayCounter < runDelay)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, -maxWalkSpeed);
+        }
+        else if(rb.linearVelocity.z < -maxRunSpeed)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, -maxRunSpeed);
+        }
+
 
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
         {
+            runDelayCounter += Time.deltaTime;
             ani.Play("glumboRunCycle");
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
         }
         else
         {
-            // Resets the delay to the Player's speed increasing when moving for a period of time.
             runDelayCounter = 0;
         }
     }
@@ -150,7 +178,7 @@ public class playerMovement : MonoBehaviour
     {
         if(Input.GetKeyDown(attack))
         {
-            //instantiate a circle
+            Instantiate(attackObject, attackOrigin.position, attackOrigin.rotation);
         }
     }
 
