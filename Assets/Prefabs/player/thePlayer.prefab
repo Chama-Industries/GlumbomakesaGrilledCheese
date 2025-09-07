@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3628300512732022014
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6163733423824548715}
+  m_Layer: 0
+  m_Name: glumboAttackOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6163733423824548715
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3628300512732022014}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -0, y: 1.5, z: 2.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2490006169744184308}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6653111185495159370
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +64,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6173282539755729310}
+  - {fileID: 6163733423824548715}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!54 &5531803864081780286
@@ -97,9 +129,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e460c5a57cf151644bc9011a8ad293e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 10
+  attackOrigin: {fileID: 6163733423824548715}
+  attackObject: {fileID: 884022717193560174, guid: 6c2f0775d01a9424590f530dad09bbd2, type: 3}
   powerUp: {fileID: 0}
   canKill: 0
+  forward: 119
+  backward: 115
+  left: 97
+  right: 100
   jump: 32
+  fall: 304
+  attack: 323
   special: 323
   playerHUD: {fileID: 0}
   endingHUD: {fileID: 0}

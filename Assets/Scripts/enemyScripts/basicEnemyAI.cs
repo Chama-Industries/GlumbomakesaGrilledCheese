@@ -51,11 +51,7 @@ public class basicEnemyAI : MonoBehaviour
     // Handles collisions and if the player can kill them or not, also prevents multiple collisions at once nuking the player's score
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "player" && player.GetComponent<playerMovement>().canKill)
-        {
-            Destroy(this.gameObject);
-        }
-        else if (collision.gameObject.tag == "player" && !player.GetComponent<playerMovement>().canKill)
+        if (collision.gameObject.tag == "player")
         {
             rb.AddForce(collision.GetContact(0).normal * 6.0f, ForceMode.Impulse);
             playerScore.subtractScore(scoreDamage);
