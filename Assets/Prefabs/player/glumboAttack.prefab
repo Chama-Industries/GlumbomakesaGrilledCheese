@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338428785540422082}
   - component: {fileID: 6801862302581554123}
+  - component: {fileID: 1203532583881389110}
   m_Layer: 0
   m_Name: glumboAttack
   m_TagString: Untagged
@@ -49,12 +50,24 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1203532583881389110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884022717193560174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5850a3d9683f8d84e90476f8920b2f18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1053521913767581183
 GameObject:
   m_ObjectHideFlags: 0
