@@ -11,20 +11,23 @@ public class rangedEnemy : basicEnemyAI
     // Check to see player's location compared to whatever this is attached to. Controls actions the object can take in response to the player
     protected override void Update()
     {
-        distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (distanceFromPlayer < 30.0f && !hasFired)
+        if (!disableAI)
         {
-            shoot();
-            enemy.velocity = Vector3.zero;
-        }
-        else if (distanceFromPlayer < 50.0f)
-        {
-            enemy.SetDestination(player.transform.position);
-        }
-        else
-        {
-            enemy.ResetPath();
-            enemy.velocity = Vector3.zero;
+            distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
+            if (distanceFromPlayer < 30.0f && !hasFired)
+            {
+                shoot();
+                enemy.velocity = Vector3.zero;
+            }
+            else if (distanceFromPlayer < 50.0f)
+            {
+                enemy.SetDestination(player.transform.position);
+            }
+            else
+            {
+                enemy.ResetPath();
+                enemy.velocity = Vector3.zero;
+            }
         }
     }
 

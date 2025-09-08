@@ -7,8 +7,11 @@ public class basicEnemyAI : MonoBehaviour
     protected double distanceFromPlayer;
     protected NavMeshAgent enemy;
     protected collectibleData playerScore = new collectibleData();
+    public bool disableAI = false;
+
     public int scoreDamage = 0;
     public int HP;
+
     // Rigidbody
     protected Rigidbody rb;
     // Animator
@@ -37,7 +40,7 @@ public class basicEnemyAI : MonoBehaviour
     {
         // Constant check to see how far away the player is. Probably could be replaced by a Raycast
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (distanceFromPlayer < 25.0f)
+        if (distanceFromPlayer < 25.0f && !disableAI)
         {
             pursuit();
         }
@@ -54,21 +57,26 @@ public class basicEnemyAI : MonoBehaviour
     {
         if (collision.gameObject.tag == "player")
         {
-            rb.AddForce(collision.GetContact(0).normal * 6.0f, ForceMode.Impulse);
+            collision.gameObject.GetComponent<Rigidbody>().AddForce(collision.GetContact(0).normal * 10.0f, ForceMode.VelocityChange);
             playerScore.subtractScore(scoreDamage);
         }
     }
 
-    public void takeDamage(Collision col)
+    public void takeDamage(Collider col)
     {
+        //getting the vector3 between the attack and the enemy, so that we can send them flying
+        Vector3 flyDirection = col.gameObject.transform.position - this.gameObject.transform.position;
+        flyDirection.Normalize();
         if(HP > 1)
         {
             HP--;
-            rb.AddForce(col.GetContact(0).normal * 6.0f, ForceMode.Impulse);
+            rb.AddForce(flyDirection * 20.0f, ForceMode.VelocityChange);
         }
         else
         {
-            Destroy(this.gameObject);
+            rb.AddForce(flyDirection * 50.0f, ForceMode.VelocityChange);
+            this.GetComponent<Collider>().enabled = false;
+            Destroy(this.gameObject, 1.0f);
         }
     }
 }
