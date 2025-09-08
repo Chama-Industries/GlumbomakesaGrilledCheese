@@ -8,6 +8,7 @@ public class basicEnemyAI : MonoBehaviour
     protected NavMeshAgent enemy;
     protected collectibleData playerScore = new collectibleData();
     public int scoreDamage = 0;
+    public int HP;
     // Rigidbody
     protected Rigidbody rb;
     // Animator
@@ -55,6 +56,19 @@ public class basicEnemyAI : MonoBehaviour
         {
             rb.AddForce(collision.GetContact(0).normal * 6.0f, ForceMode.Impulse);
             playerScore.subtractScore(scoreDamage);
+        }
+    }
+
+    public void takeDamage(Collision col)
+    {
+        if(HP > 1)
+        {
+            HP--;
+            rb.AddForce(col.GetContact(0).normal * 6.0f, ForceMode.Impulse);
+        }
+        else
+        {
+            Destroy(this.gameObject);
         }
     }
 }

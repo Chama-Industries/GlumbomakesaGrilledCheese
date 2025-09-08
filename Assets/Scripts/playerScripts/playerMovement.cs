@@ -211,7 +211,7 @@ public class playerMovement : MonoBehaviour
     {
         if (Input.GetKey(special))
         {
-            Debug.Log(rb.linearVelocity);
+            // Later
         }
     }
 
