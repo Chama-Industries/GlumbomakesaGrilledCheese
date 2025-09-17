@@ -6,11 +6,11 @@ public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
     public float speed = 10.0f;
-    private float maxWalkSpeed = 20.0f;
-    private float maxRunSpeed = 50.0f;
+    private float maxWalkSpeed = 12.0f;
+    private float maxRunSpeed = 40.0f;
     private float runDelayCounter = 0;
     private float runDelay = 5;
-    private float rotateSpeed = 180f;
+    private float rotateSpeed = 500f;
     private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
     private Vector3 fallingPower = new Vector3(0, -5.0f, 0);
 
@@ -125,7 +125,6 @@ public class playerMovement : MonoBehaviour
             rb.linearVelocity = new Vector3(-maxRunSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
         }
 
-
         if (rb.linearVelocity.z > maxWalkSpeed && runDelayCounter < runDelay)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxWalkSpeed);
@@ -194,6 +193,18 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    // Allows for the Player to Damage/Kill enemies at High Speeds
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "enemy" && rb.linearVelocity.magnitude > maxRunSpeed - maxWalkSpeed)
+        {
+            if (collision.gameObject.GetComponent<basicEnemyAI>() != null)
+            {
+                collision.gameObject.GetComponent<basicEnemyAI>().takeDamage(this.GetComponent<Collider>());
+            }
+        }
+    }
+
     // Using a Raycast to check if the player is able to jump, aka no more flying
     public bool isGrounded()
     {
@@ -206,7 +217,7 @@ public class playerMovement : MonoBehaviour
         return rb.linearVelocity.y < 0;
     }
 
-    // Makes Mouse 0 do things when pressed
+    // Makes Mouse 2 do things when pressed
     void playerAbility()
     {
         if (Input.GetKey(special))

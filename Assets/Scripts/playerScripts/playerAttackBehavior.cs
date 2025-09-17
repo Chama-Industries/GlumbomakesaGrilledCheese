@@ -22,7 +22,7 @@ public class playerAttackBehavior : MonoBehaviour
             {
                 other.gameObject.GetComponent<basicEnemyAI>().takeDamage(objectsCollider);
             }
-            else if (other.gameObject.GetComponent<rangedEnemy>())
+            else if (other.gameObject.GetComponent<rangedEnemy>() != null)
             {
                 other.gameObject.GetComponent<rangedEnemy>().takeDamage(objectsCollider);
             }

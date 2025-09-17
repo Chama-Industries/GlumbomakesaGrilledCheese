@@ -119,8 +119,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  disableAI: 0
   scoreDamage: 5
-  HP: 0
+  HP: 2
 --- !u!1001 &4367042049695797261
 PrefabInstance:
   m_ObjectHideFlags: 0
