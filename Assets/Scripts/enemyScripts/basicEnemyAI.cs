@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -55,9 +56,12 @@ public class basicEnemyAI : MonoBehaviour
     // Handles collisions and if the player can kill them or not, also prevents multiple collisions at once nuking the player's score
     protected virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "player")
+        if (collision.gameObject.tag == "player" && HP > 0)
         {
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(collision.GetContact(0).normal * 10.0f, ForceMode.VelocityChange);
+            Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
+
+            collision.gameObject.GetComponent<playerMovement>().haltPlayer();
+            collision.gameObject.GetComponent<Rigidbody>().AddForce(-recoilDirection * 10.0f, ForceMode.VelocityChange);
             playerScore.subtractScore(scoreDamage);
         }
     }
@@ -66,15 +70,16 @@ public class basicEnemyAI : MonoBehaviour
     {
         //getting the vector3 between the attack and the enemy, so that we can send them flying
         Vector3 flyDirection = col.gameObject.transform.position - this.gameObject.transform.position;
+        //figure out a way calculate the normal, limit it to away from Glumbo in local Space (aka in relation to where glumbo is)
         flyDirection.Normalize();
         if(HP > 1)
         {
             HP--;
-            rb.AddForce(flyDirection * 20.0f, ForceMode.VelocityChange);
+            rb.AddForce(-flyDirection * 20.0f, ForceMode.VelocityChange);
         }
         else
         {
-            rb.AddForce(flyDirection * 50.0f, ForceMode.VelocityChange);
+            rb.AddForce(-flyDirection * 50.0f, ForceMode.VelocityChange);
             this.GetComponent<Collider>().enabled = false;
             Destroy(this.gameObject, 1.0f);
         }

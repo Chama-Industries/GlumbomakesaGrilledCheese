@@ -113,7 +113,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.25
+  m_Radius: 2.5
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0.1, y: 2.25, z: 0.1}
@@ -133,7 +133,6 @@ MonoBehaviour:
   attackOrigin: {fileID: 6163733423824548715}
   attackObject: {fileID: 884022717193560174, guid: 6c2f0775d01a9424590f530dad09bbd2, type: 3}
   powerUp: {fileID: 0}
-  canKill: 0
   forward: 119
   backward: 115
   left: 97
