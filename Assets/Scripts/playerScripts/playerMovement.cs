@@ -6,10 +6,11 @@ public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
     public float speed = 10.0f;
-    private float maxWalkSpeed = 12.0f;
-    private float maxRunSpeed = 40.0f;
+    private float maxWalkSpeed = 20.0f;
+    private float maxRunSpeed = 30.0f;
     private float runDelayCounter = 0;
     private float runDelay = 5;
+    private float drag = 3;
     private float rotateSpeed = 500f;
     private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
     private Vector3 fallingPower = new Vector3(0, -5.0f, 0);
@@ -25,23 +26,23 @@ public class playerMovement : MonoBehaviour
     private bool playJumpAni = false;
 
     // Variables for a Raycast
-    float distanceToGround;
+    private bool grounded;
 
     // 3D movement variable
     Vector3 movementD;
 
     // Controls
     // Directional Keys
-    public KeyCode forward = KeyCode.W;
-    public KeyCode backward = KeyCode.S;
-    public KeyCode left = KeyCode.A;
-    public KeyCode right = KeyCode.D;
+    [HideInInspector] public KeyCode forward = KeyCode.W;
+    [HideInInspector] public KeyCode backward = KeyCode.S;
+    [HideInInspector] public KeyCode left = KeyCode.A;
+    [HideInInspector] public KeyCode right = KeyCode.D;
     // Verticality Keys
-    public KeyCode jump = KeyCode.Space;
-    public KeyCode fall = KeyCode.LeftShift;
+    [HideInInspector] public KeyCode jump = KeyCode.Space;
+    [HideInInspector] public KeyCode fall = KeyCode.LeftShift;
     // Combat Keys
-    public KeyCode attack = KeyCode.Mouse0;
-    public KeyCode special = KeyCode.Mouse1;
+    [HideInInspector] public KeyCode attack = KeyCode.Mouse0;
+    [HideInInspector] public KeyCode special = KeyCode.Mouse1;
 
     // temporary variables related to ending the game
     private bool canControl = true;
@@ -59,7 +60,7 @@ public class playerMovement : MonoBehaviour
         ani.SetFloat("playerVelocity", rb.linearVelocity.magnitude);
         ani.SetBool("playerJump", playJumpAni);
         // Setting the player's distance from the ground
-        distanceToGround = GetComponent<Collider>().bounds.extents.y;
+        grounded = isGrounded();
     }
 
     // Update is called once per frame
@@ -71,6 +72,15 @@ public class playerMovement : MonoBehaviour
             playerVMove();
             playerAbility();
             playerAttack();
+        }
+        //removes movement speed cap while in Air
+        if (isGrounded())
+        {
+            rb.linearDamping = drag;
+        }
+        else
+        {
+            rb.linearDamping = 0;
         }
     }
 
@@ -84,13 +94,6 @@ public class playerMovement : MonoBehaviour
         }
         // Stops Jump Animation from becoming the Idle animation for whatever reason.
         playJumpAni = !isGrounded();
-
-        // Stop people falling into the void if they somehow get there. REMOVE LATER
-        if (this.transform.position.y < -150) 
-        {
-            haltPlayer();
-            this.transform.position = new Vector3(0f, 10f, 0f);
-        }
     }
 
     // Basic Directional Movement
@@ -105,43 +108,9 @@ public class playerMovement : MonoBehaviour
         movementD.Normalize();
 
         // Where we move the player
-        rb.AddForce(movementD * speed, ForceMode.Acceleration);
+        rb.AddForce(movementD * speed, ForceMode.Force);
 
-        //really ugly code keeping the player from going too fast (less effective vs diagonals)
-        if(rb.linearVelocity.x > maxWalkSpeed && runDelayCounter < runDelay)
-        {
-            rb.linearVelocity = new Vector3(maxWalkSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-        }
-        else if (rb.linearVelocity.x > maxRunSpeed)
-        {
-            rb.linearVelocity = new Vector3(maxRunSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-        }
-        if (rb.linearVelocity.x < -maxWalkSpeed && runDelayCounter < runDelay)
-        {
-            rb.linearVelocity = new Vector3(-maxWalkSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-        }
-        else if (rb.linearVelocity.x < -maxRunSpeed)
-        {
-            rb.linearVelocity = new Vector3(-maxRunSpeed, rb.linearVelocity.y, rb.linearVelocity.z);
-        }
-
-        if (rb.linearVelocity.z > maxWalkSpeed && runDelayCounter < runDelay)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxWalkSpeed);
-        }
-        else if(rb.linearVelocity.z > maxRunSpeed)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, maxRunSpeed);
-        }
-        if (rb.linearVelocity.z < -maxWalkSpeed && runDelayCounter < runDelay)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, -maxWalkSpeed);
-        }
-        else if(rb.linearVelocity.z < -maxRunSpeed)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, -maxRunSpeed);
-        }
-
+        limitMovementSpeed();
 
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
@@ -181,6 +150,21 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    void limitMovementSpeed()
+    {
+        Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        if(flatVelocity.magnitude > maxWalkSpeed && runDelay > runDelayCounter)
+        {
+            Vector3 cappedVelocity = flatVelocity.normalized * maxWalkSpeed;
+            rb.linearVelocity = new Vector3(cappedVelocity.x, rb.linearVelocity.y, cappedVelocity.z);
+        }
+           else if(flatVelocity.magnitude > maxRunSpeed)
+            {
+            Vector3 cappedVelocity = flatVelocity.normalized * maxRunSpeed;
+            rb.linearVelocity = new Vector3(cappedVelocity.x, rb.linearVelocity.y, cappedVelocity.z);
+        }
+    }
+
     // Ends the Level
     private void OnTriggerEnter(Collider other)
     {
@@ -205,10 +189,10 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-    // Using a Raycast to check if the player is able to jump, aka no more flying
+    // Using a Raycast to check if the player is touching a surface
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
+        return Physics.Raycast(transform.position, Vector3.down, transform.position.y * 0.55f);
     }
 
     // Unused Method for a check to playing a Falling Animation
