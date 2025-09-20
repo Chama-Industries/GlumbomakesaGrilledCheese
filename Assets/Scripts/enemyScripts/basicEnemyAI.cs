@@ -61,12 +61,12 @@ public class basicEnemyAI : MonoBehaviour
             Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
 
             collision.gameObject.GetComponent<playerMovement>().haltPlayer();
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(-recoilDirection * 10.0f, ForceMode.VelocityChange);
+            collision.gameObject.GetComponent<Rigidbody>().AddForce(-recoilDirection * 20.0f, ForceMode.VelocityChange);
             playerScore.subtractScore(scoreDamage);
         }
     }
 
-    public void takeDamage(Collider col)
+    public virtual void takeDamage(Collider col)
     {
         //getting the vector3 between the attack and the enemy, so that we can send them flying
         Vector3 flyDirection = col.gameObject.transform.position - this.gameObject.transform.position;
@@ -75,11 +75,14 @@ public class basicEnemyAI : MonoBehaviour
         if(HP > 1)
         {
             HP--;
-            rb.AddForce(-flyDirection * 20.0f, ForceMode.VelocityChange);
+            rb.AddForce(-flyDirection * 20.0f, ForceMode.Impulse);
         }
         else
         {
-            rb.AddForce(-flyDirection * 50.0f, ForceMode.VelocityChange);
+            rb.linearDamping = 0;
+            rb.constraints = RigidbodyConstraints.None;
+            rb.AddForce(-flyDirection * 50.0f, ForceMode.Impulse);
+            rb.AddTorque(Vector3.up * 10.0f, ForceMode.Impulse);
             this.GetComponent<Collider>().enabled = false;
             Destroy(this.gameObject, 1.0f);
         }
