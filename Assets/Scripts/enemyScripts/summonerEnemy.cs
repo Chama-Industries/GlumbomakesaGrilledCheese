@@ -5,10 +5,11 @@ public class summonerEnemy : basicEnemyAI
 {
     public GameObject summon;
     public Transform summonOrigin;
-    private float wait = 0;
+    private float intervalCounter = 0;
+    public float spawnInterval = 5;
+    public int Stock = 5;
     private bool canSpawn = false;
-    public int Stock;
-    public float spawnInterval;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void Start()
     {
@@ -25,14 +26,6 @@ public class summonerEnemy : basicEnemyAI
             ani = GetComponentInChildren<Animator>();
             ani.Play("idle");
         }
-        if(spawnInterval == 0)
-        {
-            spawnInterval = 5;
-        }
-        if(Stock == 0)
-        {
-            Stock = 5;
-        }
     }
 
     // Update is called once per frame
@@ -41,8 +34,8 @@ public class summonerEnemy : basicEnemyAI
         if (!disableAI)
         {
             //spawns a guy on an interval
-            wait += Time.deltaTime;
-            if(wait > spawnInterval && Stock != 0 && canSpawn && HP != 0)
+            intervalCounter += Time.deltaTime;
+            if(intervalCounter > spawnInterval && Stock != 0 && canSpawn && HP != 0)
             {
                 spawn();
             }
@@ -54,7 +47,7 @@ public class summonerEnemy : basicEnemyAI
     {
         GameObject g = Instantiate(summon, summonOrigin.position, summonOrigin.rotation);
         Stock--;
-        wait = 0;
+        intervalCounter = 0;
     }
 
     public override void takeDamage(Collider col)
