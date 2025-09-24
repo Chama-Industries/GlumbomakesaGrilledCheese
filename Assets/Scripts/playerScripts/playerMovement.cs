@@ -6,14 +6,13 @@ public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
     public float speed = 10.0f;
-    private float maxWalkSpeed = 20.0f;
-    private float maxRunSpeed = 30.0f;
-    private float runDelayCounter = 0;
-    private float runDelay = 5;
+    private float maxNormalSpeed = 20.0f;
+    private float maxBoostSpeed = 35.0f;
+    private bool overclockSpeed = false;
     private float drag = 3;
     private float rotateSpeed = 500f;
-    private Vector3 jumpPower = new Vector3(0, 14.0f, 0);
-    private Vector3 fallingPower = new Vector3(0, -5.0f, 0);
+    private Vector3 jumpPower = new Vector3(0, 18.0f, 0);
+    private Vector3 fallingPower = new Vector3(0, -9.0f, 0);
 
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
@@ -115,14 +114,9 @@ public class playerMovement : MonoBehaviour
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
         {
-            runDelayCounter += Time.deltaTime;
             ani.Play("glumboRunCycle");
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
-        }
-        else
-        {
-            runDelayCounter = 0;
         }
     }
 
@@ -134,7 +128,7 @@ public class playerMovement : MonoBehaviour
         if (Input.GetKeyDown(jump) && isGrounded())
         {
             ani.Play("glumboJump");
-            rb.AddForce(jumpPower, ForceMode.VelocityChange);
+            rb.AddForce(jumpPower, ForceMode.Impulse);
         }
         if(Input.GetKey(fall))
         {
@@ -153,14 +147,14 @@ public class playerMovement : MonoBehaviour
     void limitMovementSpeed()
     {
         Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        if(flatVelocity.magnitude > maxWalkSpeed && runDelay > runDelayCounter)
+        if(flatVelocity.magnitude > maxNormalSpeed && !overclockSpeed)
         {
-            Vector3 cappedVelocity = flatVelocity.normalized * maxWalkSpeed;
+            Vector3 cappedVelocity = flatVelocity.normalized * maxNormalSpeed;
             rb.linearVelocity = new Vector3(cappedVelocity.x, rb.linearVelocity.y, cappedVelocity.z);
         }
-           else if(flatVelocity.magnitude > maxRunSpeed)
+           else if(flatVelocity.magnitude > maxBoostSpeed)
             {
-            Vector3 cappedVelocity = flatVelocity.normalized * maxRunSpeed;
+            Vector3 cappedVelocity = flatVelocity.normalized * maxBoostSpeed;
             rb.linearVelocity = new Vector3(cappedVelocity.x, rb.linearVelocity.y, cappedVelocity.z);
         }
     }
@@ -180,7 +174,7 @@ public class playerMovement : MonoBehaviour
     // Allows for the Player to Damage/Kill enemies at High Speeds
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "enemy" && rb.linearVelocity.magnitude > maxRunSpeed - maxWalkSpeed)
+        if(collision.gameObject.tag == "enemy" && rb.linearVelocity.magnitude > maxNormalSpeed)
         {
             if (collision.gameObject.GetComponent<basicEnemyAI>() != null)
             {

@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -5,19 +6,22 @@ public class rangedEnemy : basicEnemyAI
 {
     public GameObject bullet;
     public Transform bulletOrigin;
-    private float wait = 0;
+    private float bulletDelay = 0;
+    public int volleyCount = 1;
+    public float volleyDelay = 0.5f;
+    public float timeToAttack = 3;
 
-    // Check to see player's location compared to whatever this is attached to. Controls actions the object can take in response to the player
     protected override void Update()
     {
         if (!disableAI)
         {
-            wait += Time.deltaTime;
+            bulletDelay += Time.deltaTime;
             distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-            if (distanceFromPlayer < 30.0f && wait > 3)
+            if (distanceFromPlayer < distanceToStopFromPlayer * 1.1f && bulletDelay > timeToAttack)
             {
-                shoot();
+                StartCoroutine(Shoot());
                 enemy.velocity = Vector3.zero;
+                bulletDelay = 0;
             }
             else if (distanceFromPlayer < 50.0f)
             {
@@ -31,11 +35,15 @@ public class rangedEnemy : basicEnemyAI
         }
     }
 
-    // Method for when the Projectile is fired.
-    void shoot()
+    // Fires a number of bullets defined by volleyCount, waiting between firing each bullet defined by volleyDelay
+    IEnumerator Shoot()
     {
-        bulletOrigin.LookAt(player.transform.position + new Vector3(0f, 1f, 0f));
-        GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
-        wait = 0;
+        for (int c = 0; c < volleyCount; c++)
+        {
+            this.transform.LookAt(player.transform.position);
+            bulletOrigin.LookAt(player.transform.position + new Vector3(0f, 1f, 0f));
+            GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
+            yield return new WaitForSeconds(volleyDelay);
+        }
     }
 }
