@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  disableAI: 1
+  disableAI: 0
   scoreDamage: 5
   HP: 2
   eAcceleration: 8

@@ -13,6 +13,7 @@ public class playerMovement : MonoBehaviour
     private float rotateSpeed = 500f;
     private Vector3 jumpPower = new Vector3(0, 18.0f, 0);
     private Vector3 fallingPower = new Vector3(0, -9.0f, 0);
+    public int destructionStrength = 1;
 
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
@@ -186,7 +187,7 @@ public class playerMovement : MonoBehaviour
     // Using a Raycast to check if the player is touching a surface
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, transform.position.y * 0.55f);
+        return Physics.Raycast(transform.position, Vector3.down, 1.5f);
     }
 
     // Unused Method for a check to playing a Falling Animation
