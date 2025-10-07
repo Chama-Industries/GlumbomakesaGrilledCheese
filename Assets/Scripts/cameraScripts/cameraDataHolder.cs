@@ -25,8 +25,8 @@ public class cameraDataHolder : MonoBehaviour
     {
         if (onHit.tag == "player")
         {
-            theCamera.GetComponent<playerCameraBehavior>().offset.x = desiredX;
-            theCamera.GetComponent<playerCameraBehavior>().offset.z = desiredZ;
+            theCamera.GetComponent<playerCameraBehavior>().currentOffset.x = desiredX;
+            theCamera.GetComponent<playerCameraBehavior>().currentOffset.z = desiredZ;
         }
     }
 }
