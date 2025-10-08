@@ -6,7 +6,7 @@ public class playerCameraBehavior : MonoBehaviour
     // Reference to the player
     public GameObject player;
     // offset for 3rd Person view
-    public Vector3 currentOffset = new Vector3(-15, 5, 0);
+    public Vector3 currentOffset = new Vector3(-35, 10, 0);
 
     public Vector3[] allOffsets = new Vector3[4];
 
@@ -14,13 +14,13 @@ public class playerCameraBehavior : MonoBehaviour
     void Start()
     {
         // North
-        allOffsets[0] = new Vector3(-15, 5, 0);
+        allOffsets[0] = new Vector3(-35, 10, 0);
         // East
-        allOffsets[1] = new Vector3(0, 5, 15);
+        allOffsets[1] = new Vector3(0, 10, 35);
         // South
-        allOffsets[2] = new Vector3(15, 5, 0);
+        allOffsets[2] = new Vector3(35, 10, 0);
         // West
-        allOffsets[3] = new Vector3(0, 5, -15);
+        allOffsets[3] = new Vector3(0, 10, -35);
         if (currentOffset == new Vector3(0, 0, 0) || currentOffset == null)
         {
             currentOffset = transform.position - player.transform.position;
