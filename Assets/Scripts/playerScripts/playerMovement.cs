@@ -5,9 +5,9 @@ using TMPro;
 public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
-    public float speed = 10.0f;
-    private float maxNormalSpeed = 20.0f;
-    private float maxBoostSpeed = 35.0f;
+    public float speed = 15.0f;
+    private float maxNormalSpeed = 30.0f;
+    private float maxBoostSpeed = 45.0f;
     private bool overclockSpeed = false;
     private float drag = 3;
     private float rotateSpeed = 500f;
@@ -108,6 +108,7 @@ public class playerMovement : MonoBehaviour
         movementD.Normalize();
 
         // Where we move the player
+        // AddRelativeForce can get movement better with the camera but its kinda jank, find a good fix/tutorial later
         rb.AddForce(movementD * speed, ForceMode.Force);
 
         limitMovementSpeed();
