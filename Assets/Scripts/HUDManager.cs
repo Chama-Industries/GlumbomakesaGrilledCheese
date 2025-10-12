@@ -10,95 +10,62 @@ public class HUDManager : MonoBehaviour
     public Slider glumboMeter;
     private collectibleData playerScore = new collectibleData();
     public TextMeshProUGUI theScore;
-    public TextMeshProUGUI endingScore;
     //Variables used to check the state of the player's score in order to have the HUD react properly
     private double scoreCheck;
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
-    public Texture2D[] allReactions = new Texture2D[6];
-    // Variables to control what image is shown
-    private bool alternateImage = true;
-    private int firstImage = 0;
-    private int secondImage = 1;
+    // 2D Arrays dont like the Inspector, this is a workaround. Fortunately the Types of Reactions are finite
+    public Texture2D[] idle;
+    public Texture2D[] happy;
+    public Texture2D[] unhappy;
+    /*
+     * 0 - Idle
+     * 1 - Happy
+     * 2 - Unhappy
+     */
+    public Texture2D[][] allReactions = new Texture2D[3][];
+    // Pointer for which Type of Reaction we use
+    private int reactionType = 0;
 
     //temporary counter variables to reset the reaction image to the default ones
-    private int counter = 0;
-    private int resetAt = -1;
+    private double counter = 0;
+
+    private void Start()
+    {
+        allReactions[0] = idle;
+        allReactions[1] = happy;
+        allReactions[2] = unhappy;
+    }
+
+    private void Update()
+    {
+        counter += Time.deltaTime;
+    }
 
     private void FixedUpdate()
     {
         updateScore();
-        // Ideally this would be the only code for alternative images giving a false sense of animation (besides I think it looks cool)
-        // Find a way to just swap pointers for what image is currently being displayed
-        if (alternateImage)
-        {
-            currentReaction.texture = allReactions[firstImage];
-            alternateImage = false;
-        }
-        // Slower alternation for other reactions, changes every 10 frames
-        else if (counter % 10 == 0 && resetAt != -1)
-        {
-            currentReaction.texture = allReactions[secondImage];
-            if (counter % 20 == 0)
-            {
-                alternateImage = !alternateImage;
-            }
-        }
-        else if (resetAt == -1)
-        {
-            currentReaction.texture = allReactions[secondImage];
-            alternateImage = true;
-        }
-
-        // Ensures default image returns after a reaction happens.
-        if (counter == resetAt)
-        {
-            counter = 0;
-            firstImage = 0;
-            secondImage = 1;
-            resetAt = -1;
-        }
-        counter++;
+        animateReactions();
     }
 
     void updateScore()
     {
         if (scoreCheck != playerScore.getScore())
         {
-            // Check to see if score went up/down and calls the relevant method
-            if (playerScore.getScore() - scoreCheck > 0)
-            {
-                playerScore.changeScoreMult(0.1);
-                positiveGlumboReaction();
-            }
-            else
-            {
-                playerScore.changeScoreMult(-0.1);
-                negativeGlumboReaction();
-            }
-            //i fixed it, you're welcome.
             theScore.text = "$" + playerScore.getScore()/100;
             scoreCheck = playerScore.getScore();
             glumboMeter.value = (float)playerScore.getScore();
-            // Prevents an assignment error with the HUD in Sub-areas
-            if(SceneManager.GetActiveScene().buildIndex == 1)
-            {
-                endingScore.text = "Score: $" + playerScore.getScore()/100;
-            }
         }
     }
-    private void  positiveGlumboReaction()
-    {
-        firstImage = 2;
-        secondImage = 3;
-        // Sets a manual timer for about 4 seconds before changing back to the base reactions.
-        resetAt = counter + 200;
-    }
 
-    private void negativeGlumboReaction()
+    IEnumerator animateReactions()
     {
-        firstImage = 4;
-        secondImage = 5;
-        resetAt = counter + 200;
+       // Uses Jagged Arrays, as each type of Reaction wont have an equal number of frames/items
+       Texture2D[] reaction = allReactions[reactionType];
+       for(int j = 0; j <  reaction.Length; j++)
+       {
+            currentReaction.texture = reaction[j];
+       }
+        yield break;
     }
 }

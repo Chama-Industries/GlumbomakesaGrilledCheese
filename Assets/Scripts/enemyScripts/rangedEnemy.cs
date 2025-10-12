@@ -45,5 +45,6 @@ public class rangedEnemy : basicEnemyAI
             GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
             yield return new WaitForSeconds(volleyDelay);
         }
+        yield break;
     }
 }
