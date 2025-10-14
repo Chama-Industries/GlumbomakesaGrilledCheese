@@ -3752,6 +3752,22 @@ PrefabInstance:
       propertyPath: currentReaction
       value: 
       objectReference: {fileID: 280843569}
+    - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
+      propertyPath: idle.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
+      propertyPath: 'idle.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2800000, guid: bbaac82533d48d745b99804589c79956, type: 3}
+    - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
+      propertyPath: 'idle.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2800000, guid: a6f397d7d38f81948a0959f945e864d1, type: 3}
+    - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
+      propertyPath: 'idle.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2800000, guid: 5091053495b534744aa263e9c0a75e2f, type: 3}
     - target: {fileID: 6062374673845034132, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
       propertyPath: m_Name
       value: UIManager

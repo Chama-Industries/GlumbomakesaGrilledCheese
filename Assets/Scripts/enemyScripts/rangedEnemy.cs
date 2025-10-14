@@ -19,9 +19,8 @@ public class rangedEnemy : basicEnemyAI
             distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
             if (distanceFromPlayer < distanceToStopFromPlayer * 1.1f && bulletDelay > timeToAttack)
             {
-                StartCoroutine(Shoot());
                 enemy.velocity = Vector3.zero;
-                bulletDelay = 0;
+                StartCoroutine(Shoot());
             }
             else if (distanceFromPlayer < 50.0f)
             {
@@ -38,6 +37,7 @@ public class rangedEnemy : basicEnemyAI
     // Fires a number of bullets defined by volleyCount, waiting between firing each bullet defined by volleyDelay
     IEnumerator Shoot()
     {
+        bulletDelay = 0;
         for (int c = 0; c < volleyCount; c++)
         {
             this.transform.LookAt(player.transform.position);

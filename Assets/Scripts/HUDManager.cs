@@ -26,9 +26,7 @@ public class HUDManager : MonoBehaviour
     public Texture2D[][] allReactions = new Texture2D[3][];
     // Pointer for which Type of Reaction we use
     private int reactionType = 0;
-
-    //temporary counter variables to reset the reaction image to the default ones
-    private double counter = 0;
+    private bool cycleImages = true;
 
     private void Start()
     {
@@ -39,13 +37,13 @@ public class HUDManager : MonoBehaviour
 
     private void Update()
     {
-        counter += Time.deltaTime;
-    }
-
-    private void FixedUpdate()
-    {
         updateScore();
-        animateReactions();
+        // Boolean stops unity from calling the Coroutine multiple times before it's finished
+        if(cycleImages)
+        {
+            StartCoroutine(animateReactions());
+            cycleImages = false;
+        }
     }
 
     void updateScore()
@@ -65,7 +63,8 @@ public class HUDManager : MonoBehaviour
        for(int j = 0; j <  reaction.Length; j++)
        {
             currentReaction.texture = reaction[j];
+            yield return new WaitForSeconds(0.25f);
        }
-        yield break;
+        cycleImages = true;
     }
 }
