@@ -26,13 +26,54 @@ public class HUDManager : MonoBehaviour
     public Texture2D[][] allReactions = new Texture2D[3][];
     // Pointer for which Type of Reaction we use
     private int reactionType = 0;
+    // Boolean to keep the coroutine from constantly firing
     private bool cycleImages = true;
+
+    // Holders for getting objects that aren't defined in the Inspector
+    private Slider[] sliderHolder;
+    private TextMeshProUGUI[] textHolder;
+    private RawImage[] imageHolder;
 
     private void Start()
     {
         allReactions[0] = idle;
         allReactions[1] = happy;
         allReactions[2] = unhappy;
+
+        // Ensures that we get the correct items without having to manually assign them in the Inspector. Or in case we forgot to assign them in the inspector.
+        if(glumboMeter == null)
+        {
+            sliderHolder = FindObjectsByType<Slider>(FindObjectsSortMode.None);
+            foreach(var slider in sliderHolder)
+            {
+                if(slider.name == "glumbometer")
+                {
+                    glumboMeter = slider;
+                }
+            }
+        }
+        if(theScore == null)
+        {
+            textHolder = FindObjectsByType<TextMeshProUGUI>(FindObjectsSortMode.None);
+            foreach(var text in textHolder)
+            {
+                if(text.name == "scoreDisplay")
+                {
+                    theScore = text;
+                }
+            }
+        }
+        if(currentReaction == null)
+        {
+            imageHolder = FindObjectsByType<RawImage>(FindObjectsSortMode.None);
+            foreach (var image in imageHolder)
+            {
+                if(image.name == "glumboReactions")
+                {
+                    currentReaction = image;
+                }
+            }
+        }
     }
 
     private void Update()
@@ -52,7 +93,6 @@ public class HUDManager : MonoBehaviour
         {
             theScore.text = "$" + playerScore.getScore()/100;
             scoreCheck = playerScore.getScore();
-            glumboMeter.value = (float)playerScore.getScore();
         }
     }
 

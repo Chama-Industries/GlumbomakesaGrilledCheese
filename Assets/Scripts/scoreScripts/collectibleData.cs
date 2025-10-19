@@ -4,6 +4,8 @@ public class collectibleData
     // Base Class for all stuff to access the player's score whenever
     private static double currentScore = 0;
     private double scoreMult = 1;
+    private double glumbometerValue;
+
     public double getScore()
     {
         return currentScore;
@@ -30,6 +32,16 @@ public class collectibleData
         {
             scoreMult = 0;
         }
+    }
+
+    public void setMeterValue(double g)
+    {
+        glumbometerValue = g;
+    }
+
+    public double getMeterValue()
+    {
+        return glumbometerValue;
     }
 
     public void resetScore()

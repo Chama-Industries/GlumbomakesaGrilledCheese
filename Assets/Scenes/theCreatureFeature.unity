@@ -1249,6 +1249,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3955609825395898907, guid: b874a3b67fd5c8a47bea42fdf068286c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 4789325645643994816, guid: b874a3b67fd5c8a47bea42fdf068286c, type: 3}
       propertyPath: m_Name
       value: HUD
@@ -3759,11 +3763,11 @@ PrefabInstance:
     - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
       propertyPath: 'idle.Array.data[0]'
       value: 
-      objectReference: {fileID: 2800000, guid: bbaac82533d48d745b99804589c79956, type: 3}
+      objectReference: {fileID: 2800000, guid: 4f28807a1c6ef7f4fbe0357487dc5d64, type: 3}
     - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
       propertyPath: 'idle.Array.data[1]'
       value: 
-      objectReference: {fileID: 2800000, guid: a6f397d7d38f81948a0959f945e864d1, type: 3}
+      objectReference: {fileID: 2800000, guid: 0369e452d0febb24c913df195ee27fa4, type: 3}
     - target: {fileID: 5768205979469398383, guid: ec70703b939a9d54f90b3132fc9622e2, type: 3}
       propertyPath: 'idle.Array.data[2]'
       value: 
