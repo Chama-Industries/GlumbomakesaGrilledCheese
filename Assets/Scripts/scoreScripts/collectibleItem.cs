@@ -3,9 +3,7 @@ using UnityEngine;
 public class collectibleItem : MonoBehaviour
 {
     // Score Value
-    public int itemValue = 0;
-    // Glumbometer Value (separate from item value)
-    public double meterInfluence = 0;
+    public double itemValue = 0;
     // This class handles the score
     private collectibleData playerScore = new collectibleData();
 

@@ -11,7 +11,7 @@ public class HUDManager : MonoBehaviour
     private collectibleData playerScore = new collectibleData();
     public TextMeshProUGUI theScore;
     //Variables used to check the state of the player's score in order to have the HUD react properly
-    private double scoreCheck;
+    private double scoreCheck = 0;
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
     // 2D Arrays dont like the Inspector, this is a workaround. Fortunately the Types of Reactions are finite
@@ -89,9 +89,13 @@ public class HUDManager : MonoBehaviour
 
     void updateScore()
     {
+        // updates the score anytime the stored value (in this script) doesn't match the player's score (stored NOT in this script)
         if (scoreCheck != playerScore.getScore())
         {
-            theScore.text = "$" + playerScore.getScore()/100;
+            theScore.text = playerScore.formatScore();
+            glumboMeter.value += (float)(playerScore.getScore() - scoreCheck);
+            Debug.Log(glumboMeter.value);
+            playerScore.changeScoreMult(glumboMeter.value);
             scoreCheck = playerScore.getScore();
         }
     }
