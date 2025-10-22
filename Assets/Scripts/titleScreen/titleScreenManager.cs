@@ -8,7 +8,7 @@ public class titleScreenManager : MonoBehaviour
     public void startGame()
     {
         //Load Scene
-        SceneManager.LoadScene("glumboGrilledCheeseLevel1", LoadSceneMode.Single);
+        SceneManager.LoadScene("worldMap", LoadSceneMode.Single);
     }
 
     public void returnToMainMenu()

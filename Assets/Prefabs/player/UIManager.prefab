@@ -46,12 +46,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   glumboMeter: {fileID: 0}
   theScore: {fileID: 0}
-  endingScore: {fileID: 0}
   currentReaction: {fileID: 0}
-  allReactions:
-  - {fileID: 2800000, guid: b32e3f410a5219e48a37149977172af2, type: 3}
-  - {fileID: 2800000, guid: 5ae25412255bcc248a7f05c90933d66b, type: 3}
-  - {fileID: 2800000, guid: 6b4bdd68812e8f345a6821ba4350c93c, type: 3}
-  - {fileID: 2800000, guid: f728962e3aa60134b8de6cba950fe134, type: 3}
-  - {fileID: 2800000, guid: 5091053495b534744aa263e9c0a75e2f, type: 3}
-  - {fileID: 2800000, guid: 77dae6476ca785647945bfacb847b4b2, type: 3}
+  idle:
+  - {fileID: 2800000, guid: 4f28807a1c6ef7f4fbe0357487dc5d64, type: 3}
+  - {fileID: 2800000, guid: 0369e452d0febb24c913df195ee27fa4, type: 3}
+  happy:
+  - {fileID: 2800000, guid: ec5fb38f0f368ec428b9970e9b920e62, type: 3}
+  - {fileID: 2800000, guid: c730c9a7a3ef5d24390bd56d76b0654a, type: 3}
+  unhappy:
+  - {fileID: 2800000, guid: 04fb853e1e5221d46b34aef6e24d481a, type: 3}

@@ -10,95 +10,105 @@ public class HUDManager : MonoBehaviour
     public Slider glumboMeter;
     private collectibleData playerScore = new collectibleData();
     public TextMeshProUGUI theScore;
-    public TextMeshProUGUI endingScore;
     //Variables used to check the state of the player's score in order to have the HUD react properly
-    private double scoreCheck;
+    private double scoreCheck = 0;
     // Currently Temporary Public variables to manage the reactions
     public RawImage currentReaction;
-    public Texture2D[] allReactions = new Texture2D[6];
-    // Variables to control what image is shown
-    private bool alternateImage = true;
-    private int firstImage = 0;
-    private int secondImage = 1;
+    // 2D Arrays dont like the Inspector, this is a workaround. Fortunately the Types of Reactions are finite
+    public Texture2D[] idle;
+    public Texture2D[] happy;
+    public Texture2D[] unhappy;
+    /*
+     * 0 - Idle
+     * 1 - Happy
+     * 2 - Unhappy
+     */
+    public Texture2D[][] allReactions = new Texture2D[3][];
+    // Pointer for which Type of Reaction we use
+    private int reactionType = 0;
+    // Boolean to keep the coroutine from constantly firing
+    private bool cycleImages = true;
 
-    //temporary counter variables to reset the reaction image to the default ones
-    private int counter = 0;
-    private int resetAt = -1;
+    // Holders for getting objects that aren't defined in the Inspector
+    private Slider[] sliderHolder;
+    private TextMeshProUGUI[] textHolder;
+    private RawImage[] imageHolder;
 
-    private void FixedUpdate()
+    private void Start()
     {
-        updateScore();
-        // Ideally this would be the only code for alternative images giving a false sense of animation (besides I think it looks cool)
-        // Find a way to just swap pointers for what image is currently being displayed
-        if (alternateImage)
+        allReactions[0] = idle;
+        allReactions[1] = happy;
+        allReactions[2] = unhappy;
+
+        // Ensures that we get the correct items without having to manually assign them in the Inspector. Or in case we forgot to assign them in the inspector.
+        if(glumboMeter == null)
         {
-            currentReaction.texture = allReactions[firstImage];
-            alternateImage = false;
-        }
-        // Slower alternation for other reactions, changes every 10 frames
-        else if (counter % 10 == 0 && resetAt != -1)
-        {
-            currentReaction.texture = allReactions[secondImage];
-            if (counter % 20 == 0)
+            sliderHolder = FindObjectsByType<Slider>(FindObjectsSortMode.None);
+            foreach(var slider in sliderHolder)
             {
-                alternateImage = !alternateImage;
+                if(slider.name == "glumbometer")
+                {
+                    glumboMeter = slider;
+                }
             }
         }
-        else if (resetAt == -1)
+        if(theScore == null)
         {
-            currentReaction.texture = allReactions[secondImage];
-            alternateImage = true;
+            textHolder = FindObjectsByType<TextMeshProUGUI>(FindObjectsSortMode.None);
+            foreach(var text in textHolder)
+            {
+                if(text.name == "scoreDisplay")
+                {
+                    theScore = text;
+                }
+            }
         }
+        if(currentReaction == null)
+        {
+            imageHolder = FindObjectsByType<RawImage>(FindObjectsSortMode.None);
+            foreach (var image in imageHolder)
+            {
+                if(image.name == "glumboReactions")
+                {
+                    currentReaction = image;
+                }
+            }
+        }
+    }
 
-        // Ensures default image returns after a reaction happens.
-        if (counter == resetAt)
+    private void Update()
+    {
+        updateScore();
+        // Boolean stops unity from calling the Coroutine multiple times before it's finished
+        if(cycleImages)
         {
-            counter = 0;
-            firstImage = 0;
-            secondImage = 1;
-            resetAt = -1;
+            StartCoroutine(animateReactions());
+            cycleImages = false;
         }
-        counter++;
     }
 
     void updateScore()
     {
+        // updates the score anytime the stored value (in this script) doesn't match the player's score (stored NOT in this script)
         if (scoreCheck != playerScore.getScore())
         {
-            // Check to see if score went up/down and calls the relevant method
-            if (playerScore.getScore() - scoreCheck > 0)
-            {
-                playerScore.changeScoreMult(0.1);
-                positiveGlumboReaction();
-            }
-            else
-            {
-                playerScore.changeScoreMult(-0.1);
-                negativeGlumboReaction();
-            }
-            //i fixed it, you're welcome.
-            theScore.text = "$" + playerScore.getScore()/100;
+            theScore.text = playerScore.formatScore();
+            glumboMeter.value += (float)(playerScore.getScore() - scoreCheck);
+            Debug.Log(glumboMeter.value);
+            playerScore.changeScoreMult(glumboMeter.value);
             scoreCheck = playerScore.getScore();
-            glumboMeter.value = (float)playerScore.getScore();
-            // Prevents an assignment error with the HUD in Sub-areas
-            if(SceneManager.GetActiveScene().buildIndex == 1)
-            {
-                endingScore.text = "Score: $" + playerScore.getScore()/100;
-            }
         }
     }
-    private void  positiveGlumboReaction()
-    {
-        firstImage = 2;
-        secondImage = 3;
-        // Sets a manual timer for about 4 seconds before changing back to the base reactions.
-        resetAt = counter + 200;
-    }
 
-    private void negativeGlumboReaction()
+    IEnumerator animateReactions()
     {
-        firstImage = 4;
-        secondImage = 5;
-        resetAt = counter + 200;
+       // Uses Jagged Arrays, as each type of Reaction wont have an equal number of frames/items
+       Texture2D[] reaction = allReactions[reactionType];
+       for(int j = 0; j <  reaction.Length; j++)
+       {
+            currentReaction.texture = reaction[j];
+            yield return new WaitForSeconds(0.25f);
+       }
+        cycleImages = true;
     }
 }

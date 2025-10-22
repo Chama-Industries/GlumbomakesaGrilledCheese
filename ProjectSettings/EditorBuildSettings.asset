@@ -8,12 +8,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/titleScreen.unity
     guid: 9d7c4506dc3ff6d43be56426f72ed533
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/glumboGrilledCheeseLevel1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/testingRoom.unity
     guid: b24149e7af3d48247afa8b9c528ba05a
+  - enabled: 1
+    path: Assets/Scenes/worldMap.unity
+    guid: ac0dfcbca95ecf744aad385ad17ab176
+  - enabled: 1
+    path: Assets/Scenes/theCreatureFeature.unity
+    guid: b2f2f08f4327dab4d8a4c6682420c55d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   m_UseUCBPForAssetBundles: 0

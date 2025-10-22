@@ -9,6 +9,9 @@ TagManager:
   - cameraData
   - levelEnd
   - timer
+  - reactionImage
+  - glumbometer
+  - scoreDisplay
   layers:
   - Default
   - TransparentFX
