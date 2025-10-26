@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class HUDManager : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class HUDManager : MonoBehaviour
     private int reactionType = 0;
     // Boolean to keep the coroutine from constantly firing
     private bool cycleImages = true;
+    public Sprite[] meterIcons = new Sprite[3];
+    private Image currentMeterImage;
 
     // Holders for getting objects that aren't defined in the Inspector
     private Slider[] sliderHolder;
@@ -74,6 +77,8 @@ public class HUDManager : MonoBehaviour
                 }
             }
         }
+
+        currentMeterImage = glumboMeter.GetComponentsInChildren<Image>()[2];
     }
 
     private void Update()
@@ -97,6 +102,18 @@ public class HUDManager : MonoBehaviour
             Debug.Log(glumboMeter.value);
             playerScore.changeScoreMult(glumboMeter.value);
             scoreCheck = playerScore.getScore();
+        }
+        if(glumboMeter.normalizedValue > 0.5)
+        {
+            currentMeterImage.sprite = meterIcons[0];
+        }
+        else if(glumboMeter.normalizedValue < -0.5)
+        {
+            currentMeterImage.sprite = meterIcons[2];
+        }
+        else
+        {
+            currentMeterImage.sprite = meterIcons[1];
         }
     }
 
