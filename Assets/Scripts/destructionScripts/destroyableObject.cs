@@ -7,6 +7,7 @@ public class destroyableObject : MonoBehaviour
     public int objectStrength = 1;
     public int flingForce = 10;
     private Rigidbody rb;
+    private Collider objCollider;
 
     public bool crumble = false;
     public bool cannotDestroy = false;
@@ -14,6 +15,7 @@ public class destroyableObject : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        getCollider(this.gameObject);
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -52,7 +54,7 @@ public class destroyableObject : MonoBehaviour
                 rb.constraints = RigidbodyConstraints.None;
                 rb.AddForce(-recoilDirection * 50.0f, ForceMode.Impulse);
                 rb.AddTorque(Vector3.up * 10.0f, ForceMode.Impulse);
-                this.GetComponent<Collider>().enabled = false;
+                objCollider.enabled = false;
                 Destroy(this.gameObject, 1.0f);
             }
         }
@@ -74,7 +76,7 @@ public class destroyableObject : MonoBehaviour
             rb.constraints = RigidbodyConstraints.None;
             rb.AddForce(-flyDirection * 50.0f, ForceMode.Impulse);
             rb.AddTorque(Vector3.up * 10.0f, ForceMode.Impulse);
-            this.GetComponent<Collider>().enabled = false;
+            objCollider.enabled = false;
             Destroy(this.gameObject, 1.0f);
         }
     }
@@ -84,6 +86,18 @@ public class destroyableObject : MonoBehaviour
         if (other.gameObject.tag != "enemy")
         {
             impactReaction(other);
+        }
+    }
+
+    private void getCollider(GameObject r)
+    {
+        if (r.GetComponent<Collider>() == null)
+        {
+            getCollider(r.transform.GetChild(0).gameObject);
+        }
+        else
+        {
+            objCollider = this.GetComponent<Collider>();
         }
     }
 }

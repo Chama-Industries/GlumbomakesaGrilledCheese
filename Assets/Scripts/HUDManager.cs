@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class HUDManager : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class HUDManager : MonoBehaviour
     private int reactionType = 0;
     // Boolean to keep the coroutine from constantly firing
     private bool cycleImages = true;
+    public Sprite[] meterIcons = new Sprite[3];
+    private Image currentMeterImage;
 
     // Holders for getting objects that aren't defined in the Inspector
     private Slider[] sliderHolder;
@@ -74,6 +77,8 @@ public class HUDManager : MonoBehaviour
                 }
             }
         }
+
+        currentMeterImage = glumboMeter.GetComponentsInChildren<Image>()[2];
     }
 
     private void Update()
@@ -85,6 +90,10 @@ public class HUDManager : MonoBehaviour
             StartCoroutine(animateReactions());
             cycleImages = false;
         }
+        if(reactionType != 0)
+        {
+            StartCoroutine(resetToIdleReactions());
+        }
     }
 
     void updateScore()
@@ -92,11 +101,30 @@ public class HUDManager : MonoBehaviour
         // updates the score anytime the stored value (in this script) doesn't match the player's score (stored NOT in this script)
         if (scoreCheck != playerScore.getScore())
         {
+            if((playerScore.getScore() - scoreCheck) > 0)
+            {
+                reactionType = 1;
+            }
+            if((playerScore.getScore() - scoreCheck) < 0)
+            {
+                reactionType = 2;
+            }
             theScore.text = playerScore.formatScore();
             glumboMeter.value += (float)(playerScore.getScore() - scoreCheck);
-            Debug.Log(glumboMeter.value);
             playerScore.changeScoreMult(glumboMeter.value);
             scoreCheck = playerScore.getScore();
+        }
+        if(glumboMeter.normalizedValue > 0.75)
+        {
+            currentMeterImage.sprite = meterIcons[0];
+        }
+        else if(glumboMeter.normalizedValue < 0.25)
+        {
+            currentMeterImage.sprite = meterIcons[2];
+        }
+        else
+        {
+            currentMeterImage.sprite = meterIcons[1];
         }
     }
 
@@ -110,5 +138,11 @@ public class HUDManager : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
        }
         cycleImages = true;
+    }
+
+    IEnumerator resetToIdleReactions()
+    {
+        yield return new WaitForSeconds(3.0f);
+        reactionType = 0;
     }
 }

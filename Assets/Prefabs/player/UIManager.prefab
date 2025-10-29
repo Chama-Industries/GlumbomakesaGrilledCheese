@@ -55,3 +55,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: c730c9a7a3ef5d24390bd56d76b0654a, type: 3}
   unhappy:
   - {fileID: 2800000, guid: 04fb853e1e5221d46b34aef6e24d481a, type: 3}
+  meterIcons:
+  - {fileID: 21300000, guid: 085cd3af161c0704ea6bc2f6d729f743, type: 3}
+  - {fileID: 21300000, guid: fe8475eeee60cea4d891abf8db3b5a9f, type: 3}
+  - {fileID: 21300000, guid: 3bd6c51b1f521244d8fe61555f9d8d4a, type: 3}

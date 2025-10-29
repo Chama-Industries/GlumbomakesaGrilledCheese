@@ -14,19 +14,11 @@ public class collectibleData
     public void addScore(double inScore)
     {
         currentScore += inScore * scoreMult;
-        if(currentScore < -100)
-        {
-            currentScore = -100;
-        }
     }
 
     public void subtractScore(double inScore)
     {
         currentScore -= inScore;
-        if(currentScore < -100)
-        {
-            currentScore = -100;
-        }
     }
 
     public double getScoreMult()
