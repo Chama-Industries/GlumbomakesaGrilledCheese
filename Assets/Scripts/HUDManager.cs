@@ -90,6 +90,10 @@ public class HUDManager : MonoBehaviour
             StartCoroutine(animateReactions());
             cycleImages = false;
         }
+        if(reactionType != 0)
+        {
+            StartCoroutine(resetToIdleReactions());
+        }
     }
 
     void updateScore()
@@ -97,17 +101,24 @@ public class HUDManager : MonoBehaviour
         // updates the score anytime the stored value (in this script) doesn't match the player's score (stored NOT in this script)
         if (scoreCheck != playerScore.getScore())
         {
+            if((playerScore.getScore() - scoreCheck) > 0)
+            {
+                reactionType = 1;
+            }
+            if((playerScore.getScore() - scoreCheck) < 0)
+            {
+                reactionType = 2;
+            }
             theScore.text = playerScore.formatScore();
             glumboMeter.value += (float)(playerScore.getScore() - scoreCheck);
-            Debug.Log(glumboMeter.value);
             playerScore.changeScoreMult(glumboMeter.value);
             scoreCheck = playerScore.getScore();
         }
-        if(glumboMeter.normalizedValue > 0.5)
+        if(glumboMeter.normalizedValue > 0.75)
         {
             currentMeterImage.sprite = meterIcons[0];
         }
-        else if(glumboMeter.normalizedValue < -0.5)
+        else if(glumboMeter.normalizedValue < 0.25)
         {
             currentMeterImage.sprite = meterIcons[2];
         }
@@ -127,5 +138,11 @@ public class HUDManager : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
        }
         cycleImages = true;
+    }
+
+    IEnumerator resetToIdleReactions()
+    {
+        yield return new WaitForSeconds(3.0f);
+        reactionType = 0;
     }
 }
