@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class playerMovement : MonoBehaviour
 {
@@ -23,7 +24,6 @@ public class playerMovement : MonoBehaviour
     // Rigidbody
     private Rigidbody rb;
     private Animator ani;
-    private bool playJumpAni = false;
 
     // Variables for a Raycast
     private bool grounded;
@@ -57,8 +57,6 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         // Get Animator component
         ani = GetComponentInChildren<Animator>();
-        ani.SetFloat("playerVelocity", rb.linearVelocity.magnitude);
-        ani.SetBool("playerJump", playJumpAni);
         // Setting the player's distance from the ground
         grounded = isGrounded();
     }
@@ -74,12 +72,15 @@ public class playerMovement : MonoBehaviour
             playerAttack();
         }
         //removes movement speed cap while in Air
+        grounded = !isGrounded();
         if (isGrounded())
         {
+            ani.SetBool("isAirborne", grounded);
             rb.linearDamping = drag;
         }
         else
         {
+            ani.SetBool("isAirborne", grounded);
             rb.linearDamping = 0;
         }
     }
@@ -92,8 +93,6 @@ public class playerMovement : MonoBehaviour
         {
             Application.Quit();
         }
-        // Stops Jump Animation from becoming the Idle animation for whatever reason.
-        playJumpAni = !isGrounded();
     }
 
     // Basic Directional Movement
@@ -107,6 +106,7 @@ public class playerMovement : MonoBehaviour
         // Keep Force Multiplication out of the initial movement directional calculation
         movementD.Normalize();
 
+        ani.SetFloat("movementMagnitude", movementD.magnitude);
         // Where we move the player
         // AddRelativeForce can get movement better with the camera but its kinda jank, find a good fix/tutorial later
         rb.AddForce(movementD * speed, ForceMode.Force);
@@ -116,7 +116,7 @@ public class playerMovement : MonoBehaviour
         // Rotates the player to match the direction of movement
         if (movementD != Vector3.zero)
         {
-            ani.Play("glumboRunCycle");
+            ani.Play("runCycle");
             Quaternion rotationD = Quaternion.LookRotation(movementD, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotationD, rotateSpeed * Time.deltaTime);
         }
@@ -129,7 +129,7 @@ public class playerMovement : MonoBehaviour
         // Code to apply a vertical force to the player
         if (Input.GetKeyDown(jump) && isGrounded())
         {
-            ani.Play("glumboJump");
+            ani.Play("jump");
             rb.AddForce(jumpPower, ForceMode.Impulse);
         }
         if(Input.GetKey(fall))
@@ -197,6 +197,19 @@ public class playerMovement : MonoBehaviour
         return rb.linearVelocity.y < 0;
     }
 
+    // Method Call for other Scripts if they need to check if the player is Moving
+    public bool isPlayerMoving()
+    {
+        if(rb.linearVelocity.magnitude > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     // Makes Mouse 2 do things when pressed
     void playerAbility()
     {
@@ -216,6 +229,14 @@ public class playerMovement : MonoBehaviour
     public void haltPlayer()
     {
         rb.linearVelocity = Vector3.zero;
+    }
+
+    public void resetBoostedSpeed()
+    {
+        if (overclockSpeed)
+        {
+            overclockSpeed = false;
+        }
     }
 }
 
