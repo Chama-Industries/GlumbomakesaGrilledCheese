@@ -13,6 +13,10 @@ public class playerCameraBehavior : MonoBehaviour
     // gets the difference between the player and the camera's positions
     void Start()
     {
+        if(player == null)
+        {
+            player = GameObject.FindWithTag("player");
+        }
         // North
         allOffsets[0] = new Vector3(-35, 10, 0);
         // East
