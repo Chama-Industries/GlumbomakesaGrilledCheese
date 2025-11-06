@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410793763823496106}
-  - component: {fileID: 1852215491629463339}
   - component: {fileID: 8513885654113900779}
+  - component: {fileID: 1852215491629463339}
   m_Layer: 0
   m_Name: destructibleBench
   m_TagString: Untagged
@@ -34,23 +34,6 @@ Transform:
   - {fileID: 1336679327001536436}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1852215491629463339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7399952032266036171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56ae00495a6d89444990a45c0e42c8e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectHP: 1
-  objectStrength: 1
-  flingForce: 10
-  crumble: 0
-  cannotDestroy: 0
 --- !u!54 &8513885654113900779
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -78,6 +61,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1852215491629463339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7399952032266036171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ae00495a6d89444990a45c0e42c8e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectHP: 1
+  objectStrength: 1
+  flingForce: 10
+  crumble: 0
+  cannotDestroy: 0
 --- !u!1001 &1515021166865383519
 PrefabInstance:
   m_ObjectHideFlags: 0
