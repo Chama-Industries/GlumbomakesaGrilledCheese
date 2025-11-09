@@ -40,7 +40,6 @@ public class basicEnemyAI : MonoBehaviour
         if(GetComponentInChildren<Animator>())
         {
             ani = GetComponentInChildren<Animator>();
-            ani.Play("idle");
         }
         enemy = GetComponent<NavMeshAgent>();
         if(enemy != null)
@@ -57,7 +56,12 @@ public class basicEnemyAI : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
         if (distanceFromPlayer < 25.0f && !disableAI)
         {
+            ani.SetTrigger("pursuit");
             pursuit();
+        }
+        else
+        {
+            ani.ResetTrigger("pursuit");
         }
     }
 
@@ -72,6 +76,7 @@ public class basicEnemyAI : MonoBehaviour
     {
         if (collision.gameObject.tag == "player" && HP > 0)
         {
+            ani.SetTrigger("attack");
             Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
             recoilDirection = new Vector3(recoilDirection.x, 0.0f, recoilDirection.z);
             recoilDirection.Normalize();
@@ -79,6 +84,7 @@ public class basicEnemyAI : MonoBehaviour
             collision.gameObject.GetComponent<playerMovement>().haltPlayer();
             collision.gameObject.GetComponent<Rigidbody>().AddForce(recoilDirection * recoilMult, ForceMode.Impulse);
             playerScore.subtractScore(scoreDamage);
+            ani.ResetTrigger("attack");
         }
     }
 

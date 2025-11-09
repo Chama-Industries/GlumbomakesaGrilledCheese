@@ -93,11 +93,14 @@ public class destroyableObject : MonoBehaviour
     {
         if (r.GetComponent<Collider>() == null)
         {
-            getCollider(r.transform.GetChild(0).gameObject);
+            for(int i = 0; i < r.transform.childCount; i++)
+            {
+                getCollider(r.transform.GetChild(i).gameObject);
+            }
         }
         else
         {
-            objCollider = this.GetComponent<Collider>();
+            objCollider = r.GetComponent<Collider>();
         }
     }
 }

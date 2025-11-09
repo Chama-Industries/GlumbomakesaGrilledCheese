@@ -75,7 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectHP: 1
   objectStrength: 1
-  flingForce: 10
+  flingForce: 15
   crumble: 0
   cannotDestroy: 0
 --- !u!1001 &8647842756424932620
