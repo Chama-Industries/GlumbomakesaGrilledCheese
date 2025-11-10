@@ -54,14 +54,21 @@ public class basicEnemyAI : MonoBehaviour
     {
         // Constant check to see how far away the player is. Probably could be replaced by a Raycast
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (distanceFromPlayer < 25.0f && !disableAI)
+        if (distanceFromPlayer < 35.0f && !disableAI)
         {
-            ani.SetTrigger("pursuit");
+            if (GetComponentInChildren<Animator>())
+            {
+                ani.SetBool("pursuit", true);
+            }
             pursuit();
         }
         else
         {
-            ani.ResetTrigger("pursuit");
+            enemy.ResetPath();
+            if (GetComponentInChildren<Animator>())
+            {
+                ani.SetBool("pursuit", false);
+            }
         }
     }
 
@@ -76,7 +83,6 @@ public class basicEnemyAI : MonoBehaviour
     {
         if (collision.gameObject.tag == "player" && HP > 0)
         {
-            ani.SetTrigger("attack");
             Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
             recoilDirection = new Vector3(recoilDirection.x, 0.0f, recoilDirection.z);
             recoilDirection.Normalize();
@@ -84,7 +90,6 @@ public class basicEnemyAI : MonoBehaviour
             collision.gameObject.GetComponent<playerMovement>().haltPlayer();
             collision.gameObject.GetComponent<Rigidbody>().AddForce(recoilDirection * recoilMult, ForceMode.Impulse);
             playerScore.subtractScore(scoreDamage);
-            ani.ResetTrigger("attack");
         }
     }
 
