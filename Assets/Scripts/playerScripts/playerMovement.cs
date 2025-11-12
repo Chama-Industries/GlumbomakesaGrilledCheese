@@ -18,6 +18,7 @@ public class playerMovement : MonoBehaviour
     // Variables that dictate movement direction
     protected float hIn;
     protected float vIn;
+    private bool flipMovementD = false;
 
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
@@ -101,8 +102,16 @@ public class playerMovement : MonoBehaviour
     // Basic Directional Movement
     void playerDMove()
     {
-        hIn = Input.GetAxis("Horizontal");
-        vIn = Input.GetAxis("Vertical");
+        if(flipMovementD)
+        {
+            hIn = -Input.GetAxis("Horizontal");
+            vIn = -Input.GetAxis("Vertical");
+        }
+        else
+        {
+            hIn = Input.GetAxis("Horizontal");
+            vIn = Input.GetAxis("Vertical");
+        }
 
         // Adjusted movement direction based on camera or player orientation
         movementD = new Vector3(vIn, 0, -hIn);
@@ -239,6 +248,19 @@ public class playerMovement : MonoBehaviour
         if (overclockSpeed)
         {
             overclockSpeed = false;
+        }
+    }
+
+    // Probably include a momentum boost here
+    public void flipMovementDirection(bool d)
+    {
+        if(d)
+        {
+            flipMovementD = true;
+        }
+        else
+        {
+            flipMovementD = false;
         }
     }
 }
