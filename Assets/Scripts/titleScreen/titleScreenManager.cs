@@ -18,6 +18,13 @@ public class titleScreenManager : MonoBehaviour
         SceneManager.LoadScene("titleScreen", LoadSceneMode.Single);
     }
 
+    public void returnToWorldMap()
+    {
+        playerScore.resetScore();
+        //Load Scene
+        SceneManager.LoadScene("worldMap", LoadSceneMode.Single);
+    }
+
     public void quitGame()
     {
         Application.Quit();

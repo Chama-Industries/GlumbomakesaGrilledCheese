@@ -40,7 +40,6 @@ public class basicEnemyAI : MonoBehaviour
         if(GetComponentInChildren<Animator>())
         {
             ani = GetComponentInChildren<Animator>();
-            ani.Play("idle");
         }
         enemy = GetComponent<NavMeshAgent>();
         if(enemy != null)
@@ -55,9 +54,21 @@ public class basicEnemyAI : MonoBehaviour
     {
         // Constant check to see how far away the player is. Probably could be replaced by a Raycast
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
-        if (distanceFromPlayer < 25.0f && !disableAI)
+        if (distanceFromPlayer < 35.0f && !disableAI)
         {
+            if (GetComponentInChildren<Animator>())
+            {
+                ani.SetBool("pursuit", true);
+            }
             pursuit();
+        }
+        else
+        {
+            enemy.ResetPath();
+            if (GetComponentInChildren<Animator>())
+            {
+                ani.SetBool("pursuit", false);
+            }
         }
     }
 

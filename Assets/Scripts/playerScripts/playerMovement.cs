@@ -12,9 +12,13 @@ public class playerMovement : MonoBehaviour
     private bool overclockSpeed = false;
     private float drag = 3;
     private float rotateSpeed = 500f;
-    private Vector3 jumpPower = new Vector3(0, 18.0f, 0);
-    private Vector3 fallingPower = new Vector3(0, -9.0f, 0);
+    private Vector3 jumpPower = new Vector3(0, 30.0f, 0);
+    private Vector3 fallingPower = new Vector3(0, -10.0f, 0);
     public int destructionStrength = 1;
+    // Variables that dictate movement direction
+    protected float hIn;
+    protected float vIn;
+    private bool flipMovementD = false;
 
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
@@ -98,8 +102,16 @@ public class playerMovement : MonoBehaviour
     // Basic Directional Movement
     void playerDMove()
     {
-        float hIn = Input.GetAxis("Horizontal");
-        float vIn = Input.GetAxis("Vertical");
+        if(flipMovementD)
+        {
+            hIn = -Input.GetAxis("Horizontal");
+            vIn = -Input.GetAxis("Vertical");
+        }
+        else
+        {
+            hIn = Input.GetAxis("Horizontal");
+            vIn = Input.GetAxis("Vertical");
+        }
 
         // Adjusted movement direction based on camera or player orientation
         movementD = new Vector3(vIn, 0, -hIn);
@@ -236,6 +248,21 @@ public class playerMovement : MonoBehaviour
         if (overclockSpeed)
         {
             overclockSpeed = false;
+        }
+    }
+
+    // Probably include a momentum boost here
+    public void flipMovementDirection(bool d)
+    {
+        if(d)
+        {
+            flipMovementD = true;
+            rb.AddForce(Vector3.forward* speed * 20, ForceMode.Impulse);
+        }
+        else
+        {
+            flipMovementD = false;
+            rb.AddForce(Vector3.back * speed * 20, ForceMode.Impulse);
         }
     }
 }
