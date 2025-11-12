@@ -40,11 +40,13 @@ public class playerCameraBehavior : MonoBehaviour
         if (n)
         {
             currentOffset = allOffsets[0];
+            player.GetComponent<playerMovement>().haltPlayer();
             player.GetComponent<playerMovement>().flipMovementDirection(!n);
         }
         if(s)
         {
             currentOffset = allOffsets[1];
+            player.GetComponent<playerMovement>().haltPlayer();
             player.GetComponent<playerMovement>().flipMovementDirection(s);
         }
     }

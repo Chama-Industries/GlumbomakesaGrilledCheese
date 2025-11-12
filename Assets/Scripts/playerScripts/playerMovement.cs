@@ -257,10 +257,12 @@ public class playerMovement : MonoBehaviour
         if(d)
         {
             flipMovementD = true;
+            rb.AddForce(Vector3.forward* speed * 20, ForceMode.Impulse);
         }
         else
         {
             flipMovementD = false;
+            rb.AddForce(Vector3.back * speed * 20, ForceMode.Impulse);
         }
     }
 }

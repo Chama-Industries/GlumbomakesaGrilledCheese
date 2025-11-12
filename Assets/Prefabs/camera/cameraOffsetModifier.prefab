@@ -107,7 +107,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 30, y: 500, z: 5}
+  m_Size: {x: 30, y: 500, z: 0.25}
   m_Center: {x: 0, y: 240, z: 0}
 --- !u!114 &4108129949373730480
 MonoBehaviour:
@@ -121,6 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 767772b17ac595a42bcf1b6c5e5735bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  desiredX: 0
-  desiredZ: -15
-  cardinalOrientation: East
+  lookNorth: 1
+  lookSouth: 0
+  theCamera: {fileID: 0}
