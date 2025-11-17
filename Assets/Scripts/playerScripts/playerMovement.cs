@@ -8,7 +8,7 @@ public class playerMovement : MonoBehaviour
     // Controls the speed of the player
     public float speed = 15.0f;
     private float maxNormalSpeed = 30.0f;
-    private float maxBoostSpeed = 45.0f;
+    private float maxBoostSpeed = 60.0f;
     private bool overclockSpeed = false;
     private float drag = 3;
     private float rotateSpeed = 500f;
@@ -23,7 +23,6 @@ public class playerMovement : MonoBehaviour
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
     public GameObject attackObject;
-    public colectibleAbility powerUp;
 
     // Rigidbody
     private Rigidbody rb;
@@ -72,7 +71,6 @@ public class playerMovement : MonoBehaviour
         {
             playerDMove();
             playerVMove();
-            playerAbility();
             playerAttack();
         }
         //removes movement speed cap while in Air
@@ -122,6 +120,11 @@ public class playerMovement : MonoBehaviour
         // Where we move the player
         // AddRelativeForce can get movement better with the camera but its kinda jank, find a good fix/tutorial later
         rb.AddForce(movementD * speed, ForceMode.Force);
+
+        if (rb.linearVelocity.magnitude < 5 && overclockSpeed)
+        {
+            resetBoostedSpeed();
+        }
 
         limitMovementSpeed();
 
@@ -203,7 +206,7 @@ public class playerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 1.5f);
     }
 
-    // Unused Method for a check to playing a Falling Animation
+    // Method check to see if the player is in the air
     public bool isFalling()
     {
         return rb.linearVelocity.y < 0;
@@ -222,25 +225,18 @@ public class playerMovement : MonoBehaviour
         }
     }
 
-    // Makes Mouse 2 do things when pressed
-    void playerAbility()
-    {
-        if (Input.GetKey(special))
-        {
-            // Later
-        }
-    }
-
-    // Get the Game Object with the script.
-    public void setPlayerAbility(GameObject g)
-    {
-        powerUp = g.GetComponent<colectibleAbility>();
-    }
-
     // Method for me to call to just stop the player whenever
     public void haltPlayer()
     {
         rb.linearVelocity = Vector3.zero;
+    }
+    
+    // Way for other Objects to boost the Player's speed
+    public void boostSpeed()
+    {
+        overclockSpeed = true;
+        speed = 30.0f;
+        Debug.Log("boosting speed");
     }
 
     public void resetBoostedSpeed()
@@ -248,10 +244,11 @@ public class playerMovement : MonoBehaviour
         if (overclockSpeed)
         {
             overclockSpeed = false;
+            speed = 15.0f;
         }
     }
 
-    // Probably include a momentum boost here
+    // flips the Controls, and applies a slight force to somewhat keep the transition smooth
     public void flipMovementDirection(bool d)
     {
         if(d)

@@ -8,14 +8,18 @@ public class playerAttackBehavior : MonoBehaviour
         objectsCollider = this.GetComponent<Collider>();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        Destroy(this.gameObject, 0.1f);
+        transform.Translate(new Vector3(-1, 0, 0));
+    }
+
+    private void Awake()
+    {
+        Destroy(this.gameObject, 0.25f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(this.gameObject);
         if(other.gameObject.tag == "enemy")
         {
             if(other.gameObject.GetComponent<basicEnemyAI>() != null)
@@ -26,6 +30,7 @@ public class playerAttackBehavior : MonoBehaviour
             {
                 other.gameObject.GetComponent<rangedEnemy>().takeDamage(objectsCollider);
             }
+            Destroy(this.gameObject);
         }
     }
 }

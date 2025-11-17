@@ -21,7 +21,7 @@ public class destroyableObject : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
-        recoilDirection = new Vector3(recoilDirection.x, 2.5f, recoilDirection.z);
+        recoilDirection = new Vector3(recoilDirection.x, Random.value * 5, recoilDirection.z);
         recoilDirection.Normalize();
         if (collision.gameObject.tag == "player")
         {

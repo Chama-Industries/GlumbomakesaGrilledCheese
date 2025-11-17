@@ -18,7 +18,7 @@ public class colectibleAbility : MonoBehaviour
     {
         if (onHit.tag == "player")
         {
-            onHit.gameObject.GetComponent<playerMovement>().setPlayerAbility(this.gameObject);
+            //onHit.gameObject.GetComponent<playerMovement>().setPlayerAbility(this.gameObject);
             this.gameObject.SetActive(false);
         }
     }
