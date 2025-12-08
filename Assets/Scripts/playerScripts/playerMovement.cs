@@ -6,19 +6,23 @@ using System.Collections;
 public class playerMovement : MonoBehaviour
 {
     // Controls the speed of the player
-    public float speed = 15.0f;
+    public float speed = 10.0f;
     private float maxNormalSpeed = 30.0f;
     private float maxBoostSpeed = 60.0f;
     private bool overclockSpeed = false;
     private float drag = 3;
     private float rotateSpeed = 500f;
-    private Vector3 jumpPower = new Vector3(0, 30.0f, 0);
-    private Vector3 fallingPower = new Vector3(0, -10.0f, 0);
+    private Vector3 jumpPower = new Vector3(0, 6.0f, 0);
+    private Vector3 fallingPower = new Vector3(0, -1.0f, 0);
     public int destructionStrength = 1;
     // Variables that dictate movement direction
     protected float hIn;
     protected float vIn;
     private bool flipMovementD = false;
+    // Booleans to keep stuff from going multiple times in a row
+    private int counter = 0;
+    private bool applyOnce = true;
+    private bool attackOnce = true;
 
     // Variables related to the Power Ups the player can aquire
     public Transform attackOrigin;
@@ -64,8 +68,7 @@ public class playerMovement : MonoBehaviour
         grounded = isGrounded();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (canControl)
         {
@@ -85,16 +88,17 @@ public class playerMovement : MonoBehaviour
             ani.SetBool("isAirborne", grounded);
             rb.linearDamping = 0;
         }
-    }
-
-    // currently houses random things
-    private void FixedUpdate()
-    {
         // If everything is on fire hit the explode button
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape))
         {
             Application.Quit();
         }
+        if (counter > 25)
+        {
+            attackOnce = true;
+            counter = 0;
+        }
+        counter++;
     }
 
     // Basic Directional Movement
@@ -118,8 +122,7 @@ public class playerMovement : MonoBehaviour
 
         ani.SetFloat("movementMagnitude", movementD.magnitude);
         // Where we move the player
-        // AddRelativeForce can get movement better with the camera but its kinda jank, find a good fix/tutorial later
-        rb.AddForce(movementD * speed, ForceMode.Force);
+        rb.AddForce(movementD * speed, ForceMode.VelocityChange);
 
         if (rb.linearVelocity.magnitude < 5 && overclockSpeed)
         {
@@ -142,22 +145,24 @@ public class playerMovement : MonoBehaviour
     void playerVMove()
     {
         // Code to apply a vertical force to the player
-        if (Input.GetKeyDown(jump) && isGrounded())
+        if (Input.GetKey(jump) && isGrounded() && applyOnce)
         {
             ani.Play("jump");
             rb.AddForce(jumpPower, ForceMode.Impulse);
+            applyOnce = false;
         }
         if(Input.GetKey(fall))
         {
-            rb.AddForce(fallingPower, ForceMode.Acceleration);
+            rb.AddForce(fallingPower, ForceMode.VelocityChange);
         }
     }
 
     void playerAttack()
     {
-        if(Input.GetKeyDown(attack))
+        if(Input.GetKey(attack) && attackOnce)
         {
             Instantiate(attackObject, attackOrigin.position, attackOrigin.rotation);
+            attackOnce = false;
         }
     }
 
@@ -203,7 +208,11 @@ public class playerMovement : MonoBehaviour
     // Using a Raycast to check if the player is touching a surface
     public bool isGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 1.5f);
+        if(!applyOnce)
+        {
+            applyOnce = true;
+        }
+        return Physics.Raycast(transform.position, Vector3.down, 2.0f);
     }
 
     // Method check to see if the player is in the air

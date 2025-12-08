@@ -11,10 +11,11 @@ public class basicEnemyAI : MonoBehaviour
     public bool disableAI = false;
 
     public int scoreDamage = 0;
-    public int HP;
+    public int HP = 1;
     public float eAcceleration = 8.0f;
     public float distanceToStopFromPlayer = 0.0f;
     public float recoilMult = 200.0f;
+    public float playerRewardOnKill = 1.0f;
 
     // Rigidbody
     protected Rigidbody rb;
@@ -50,7 +51,7 @@ public class basicEnemyAI : MonoBehaviour
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
     }
 
-    protected virtual void Update()
+    protected virtual void FixedUpdate()
     {
         // Constant check to see how far away the player is. Probably could be replaced by a Raycast
         distanceFromPlayer = Vector3.Distance(transform.position, player.transform.position);
@@ -105,6 +106,7 @@ public class basicEnemyAI : MonoBehaviour
         }
         else
         {
+            playerScore.addScore(playerRewardOnKill);
             rb.linearDamping = 0;
             rb.constraints = RigidbodyConstraints.None;
             rb.AddForce(-flyDirection * 50.0f, ForceMode.Impulse);

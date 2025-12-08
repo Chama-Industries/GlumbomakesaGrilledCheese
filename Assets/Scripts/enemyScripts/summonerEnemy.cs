@@ -29,7 +29,7 @@ public class summonerEnemy : basicEnemyAI
     }
 
     // Update is called once per frame
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (!disableAI)
         {

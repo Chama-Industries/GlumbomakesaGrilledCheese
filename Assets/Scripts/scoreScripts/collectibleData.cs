@@ -50,31 +50,39 @@ public class collectibleData
     public string formatScore()
     {
         // Absolute value used to keep negative score from breaking the display
+        // Check for Decimals
         if (Math.Abs(currentScore) % 1 == 0)
         {
             return "$" + currentScore.ToString() + ".00";
         }
-        else if(((Math.Abs(currentScore) % 1) * 100) % 10 == 0)
+        // Check for Decimals in the tenths digit
+        else if((Math.Abs(currentScore) * 100) % 100 < 0.1)
         {
             return "$" + currentScore.ToString() + "0";
         }
         else
         {
+            // Check for Large Numbers, even if its only 4 digits, the decimals take up +3
             if (Math.Abs(currentScore) > 1000)
             {
                 return "$" + currentScore.ToString().Substring(0, 7);
             }
             else if (Math.Abs(currentScore) > 100)
             {
+
                 return "$" + currentScore.ToString().Substring(0, 6);
             }
             else
             {
+                // Handles scores below 100 + decimals
                 if (currentScore.ToString().Length > 5)
                 {
                     return "$" + currentScore.ToString().Substring(0, 5);
                 }
-                return "$" + currentScore.ToString();
+                else
+                {
+                    return "$" + currentScore.ToString();
+                }
             }
         }
     }

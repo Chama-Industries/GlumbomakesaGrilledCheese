@@ -11,7 +11,7 @@ public class rangedEnemy : basicEnemyAI
     public float volleyDelay = 0.5f;
     public float timeToAttack = 3;
 
-    protected override void Update()
+    protected override void FixedUpdate()
     {
         if (!disableAI)
         {
@@ -37,7 +37,6 @@ public class rangedEnemy : basicEnemyAI
     // Fires a number of bullets defined by volleyCount, waiting between firing each bullet defined by volleyDelay
     IEnumerator Shoot()
     {
-        bulletDelay = 0;
         for (int c = 0; c < volleyCount; c++)
         {
             this.transform.LookAt(player.transform.position);
@@ -45,6 +44,7 @@ public class rangedEnemy : basicEnemyAI
             GameObject g = Instantiate(bullet, bulletOrigin.position, bulletOrigin.rotation);
             yield return new WaitForSeconds(volleyDelay);
         }
+        bulletDelay = 0;
         yield break;
     }
 }

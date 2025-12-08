@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/theCreatureFeature.unity
     guid: b2f2f08f4327dab4d8a4c6682420c55d
+  - enabled: 1
+    path: Assets/Scenes/swissConstruction.unity
+    guid: 9586261fa536774499914fae493e481c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}
   m_UseUCBPForAssetBundles: 0

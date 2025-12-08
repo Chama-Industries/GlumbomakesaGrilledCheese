@@ -78,6 +78,7 @@ MonoBehaviour:
   flingForce: 15
   crumble: 0
   cannotDestroy: 0
+  scoreValue: 2
 --- !u!1001 &8647842756424932620
 PrefabInstance:
   m_ObjectHideFlags: 0
