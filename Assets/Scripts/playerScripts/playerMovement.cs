@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
 
@@ -91,7 +92,7 @@ public class playerMovement : MonoBehaviour
         // If everything is on fire hit the explode button
         if (Input.GetKey(KeyCode.Escape))
         {
-            Application.Quit();
+            SceneManager.LoadScene("titleScreen");
         }
         if (counter > 25)
         {
