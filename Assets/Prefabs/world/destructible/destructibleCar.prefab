@@ -78,6 +78,7 @@ MonoBehaviour:
   flingForce: 100
   crumble: 0
   cannotDestroy: 0
+  scoreValue: 5
 --- !u!1001 &7486464114018567720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,10 +127,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6698989405198550286, guid: fa71b3a6a450c324cb80cfdd8bbdb3a4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a4151426bf4bab40ab31757ba2be241, type: 2}
+    - target: {fileID: -4598541979014738573, guid: fa71b3a6a450c324cb80cfdd8bbdb3a4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a36107443bf40e4c861dd81c87d5d24, type: 2}
     - target: {fileID: 919132149155446097, guid: fa71b3a6a450c324cb80cfdd8bbdb3a4, type: 3}
       propertyPath: m_Name
       value: genericCar
       objectReference: {fileID: 0}
+    - target: {fileID: 7188026553397332876, guid: fa71b3a6a450c324cb80cfdd8bbdb3a4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a4151426bf4bab40ab31757ba2be241, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

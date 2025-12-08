@@ -11,6 +11,8 @@ public class destroyableObject : MonoBehaviour
 
     public bool crumble = false;
     public bool cannotDestroy = false;
+    private collectibleData scoreRef = new collectibleData();
+    public float scoreValue = 0.5f;
 
     void Start()
     {
@@ -21,7 +23,7 @@ public class destroyableObject : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         Vector3 recoilDirection = collision.collider.gameObject.transform.position - this.gameObject.transform.position;
-        recoilDirection = new Vector3(recoilDirection.x, 2.5f, recoilDirection.z);
+        recoilDirection = new Vector3(recoilDirection.x, Random.value * 5, recoilDirection.z);
         recoilDirection.Normalize();
         if (collision.gameObject.tag == "player")
         {
@@ -44,6 +46,7 @@ public class destroyableObject : MonoBehaviour
         }
         if (objectHP == 0)
         {
+            scoreRef.addScore(scoreValue);
             if (crumble)
             {
                 Destroy(this.gameObject);
@@ -72,6 +75,7 @@ public class destroyableObject : MonoBehaviour
         }
         else
         {
+            scoreRef.addScore(scoreValue);
             rb.linearDamping = 0;
             rb.constraints = RigidbodyConstraints.None;
             rb.AddForce(-flyDirection * 50.0f, ForceMode.Impulse);
