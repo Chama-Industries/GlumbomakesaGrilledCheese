@@ -141,6 +141,16 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    // testing different movement style
+    void neoPlayerDMove()
+    {
+        vIn = Input.GetAxis("Vertical");
+        // Adjusted movement direction based on camera or player orientation
+        movementD = new Vector3(vIn, 0, 0);
+        // Keep Force Multiplication out of the initial movement directional calculation
+        movementD.Normalize();
+    }
+
 
     // Basic Vertical Movement
     void playerVMove()
