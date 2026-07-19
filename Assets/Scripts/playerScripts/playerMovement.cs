@@ -73,7 +73,7 @@ public class playerMovement : MonoBehaviour
     {
         if (canControl)
         {
-            playerDMove();
+            neoPlayerDMove();
             playerVMove();
             playerAttack();
         }
@@ -145,10 +145,20 @@ public class playerMovement : MonoBehaviour
     void neoPlayerDMove()
     {
         vIn = Input.GetAxis("Vertical");
+        hIn = Input.GetAxis("Horizontal");
         // Adjusted movement direction based on camera or player orientation
-        movementD = new Vector3(vIn, 0, 0);
+        movementD = new Vector3(vIn, 0, -hIn);
         // Keep Force Multiplication out of the initial movement directional calculation
         movementD.Normalize();
+
+        rb.AddRelativeForce(movementD * speed, ForceMode.VelocityChange);
+
+        if (rb.linearVelocity.magnitude < 5 && overclockSpeed)
+        {
+            resetBoostedSpeed();
+        }
+
+        limitMovementSpeed();
     }
 
 
@@ -179,7 +189,9 @@ public class playerMovement : MonoBehaviour
 
     void limitMovementSpeed()
     {
+        // we don't care about vertical movement. Only horizontal
         Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        // if at any point the vector calculated from the X & Z vectors (via pythagorean theorem) is greater than what we want it to be, we manually set the X & Z to their capped number
         if(flatVelocity.magnitude > maxNormalSpeed && !overclockSpeed)
         {
             Vector3 cappedVelocity = flatVelocity.normalized * maxNormalSpeed;
